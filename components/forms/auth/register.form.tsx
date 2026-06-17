@@ -5,15 +5,16 @@ import React from "react";
 
 export const RegisterForm = () => {
   return (
-    <div className="flex items-center justify-center px-6 py-10 sm:px-10 lg:px-14 ">
+    <div className="flex items-center justify-center px-6 py-6 sm:px-10 lg:px-12">
       <div className="w-full max-w-md">
         <AuthFormHeader
+          compact
           eyebrow="Create account"
           title="Join Broadway Store"
           description="Create your account to save favorites, track orders, and check out faster."
         />
 
-        <form action="" className="space-y-5">
+        <form action="" className="space-y-3.5">
           <Input
             id="name"
             label="Full name"
@@ -60,6 +61,7 @@ export const RegisterForm = () => {
         </form>
 
         <AuthFormFooter
+          compact
           text="Already have an account?"
           href="/auth/login"
           linkText="Sign in"

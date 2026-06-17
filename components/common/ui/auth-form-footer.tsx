@@ -1,18 +1,29 @@
+import Link from "next/link";
 import React from "react";
 
 interface IProps {
   text: string;
   linkText: string;
   href: string;
+  compact?: boolean;
 }
 
-const AuthFormFooter = ({ text, linkText, href }: IProps) => {
+const AuthFormFooter = ({
+  compact = false,
+  text,
+  linkText,
+  href,
+}: IProps) => {
   return (
-    <p className="mt-8 text-center text-sm text-[#64748b]">
+    <p
+      className={`text-center text-sm text-[#64748b] ${
+        compact ? "mt-5" : "mt-8"
+      }`}
+    >
       {text}{" "}
-      <a href={href} className="font-bold text-[#4338ca]">
+      <Link href={href} className="font-bold text-[#4338ca]">
         {linkText}
-      </a>
+      </Link>
     </p>
   );
 };
