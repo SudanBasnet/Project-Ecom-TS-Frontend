@@ -1,8 +1,9 @@
+import Input from "@/components/common/ui/input";
 import React from "react";
 
 export const RegisterForm = () => {
   return (
-    <div className="flex items-center justify-center px-6 py-10 sm:px-10 lg:px-14">
+    <div className="flex items-center justify-center px-6 py-10 sm:px-10 lg:px-14 ">
       <div className="w-full max-w-md">
         <div className="mb-10">
           <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#4f46e5]">
@@ -18,69 +19,33 @@ export const RegisterForm = () => {
         </div>
 
         <form action="" className="space-y-5">
-          <div>
-            <label
-              htmlFor="name"
-              className="mb-2 block text-sm font-semibold text-[#312e81]"
-            >
-              Full name
-            </label>
-            <input
-              id="name"
-              name="name"
-              type="text"
-              placeholder="John Doe"
-              className="h-12 w-full rounded-xl border border-[#c7d2fe] bg-[#f8f7ff] px-4 text-sm outline-none transition focus:border-[#4f46e5] focus:bg-white focus:ring-4 focus:ring-[#4f46e5]/10"
-            />
-          </div>
+          <Input
+            id="name"
+            label="Full name"
+            type="text"
+            placeholder="John Doe"
+          />
 
-          <div>
-            <label
-              htmlFor="email"
-              className="mb-2 block text-sm font-semibold text-[#312e81]"
-            >
-              Email address
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              placeholder="john@example.com"
-              className="h-12 w-full rounded-xl border border-[#c7d2fe] bg-[#f8f7ff] px-4 text-sm outline-none transition focus:border-[#4f46e5] focus:bg-white focus:ring-4 focus:ring-[#4f46e5]/10"
-            />
-          </div>
+          <Input
+            id="email"
+            label="Email address"
+            type="email"
+            placeholder="john@example.com"
+          />
 
-          <div>
-            <label
-              htmlFor="password"
-              className="mb-2 block text-sm font-semibold text-[#312e81]"
-            >
-              Password
-            </label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              placeholder="Create a password"
-              className="h-12 w-full rounded-xl border border-[#c7d2fe] bg-[#f8f7ff] px-4 text-sm outline-none transition focus:border-[#4f46e5] focus:bg-white focus:ring-4 focus:ring-[#4f46e5]/10"
-            />
-          </div>
+          <Input
+            id="password"
+            label="Password"
+            type="password"
+            placeholder="Create a password"
+          />
 
-          <div>
-            <label
-              htmlFor="confirm-password"
-              className="mb-2 block text-sm font-semibold text-[#312e81]"
-            >
-              Confirm password
-            </label>
-            <input
-              id="confirm-password"
-              name="confirm-password"
-              type="password"
-              placeholder="Confirm your password"
-              className="h-12 w-full rounded-xl border border-[#c7d2fe] bg-[#f8f7ff] px-4 text-sm outline-none transition focus:border-[#4f46e5] focus:bg-white focus:ring-4 focus:ring-[#4f46e5]/10"
-            />
-          </div>
+          <Input
+            id="confirm-password"
+            label="Confirm password"
+            type="password"
+            placeholder="Confirm your password"
+          />
 
           <label className="flex items-start gap-3 text-sm leading-6 text-[#64748b]">
             <input

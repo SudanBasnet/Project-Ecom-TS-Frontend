@@ -1,3 +1,4 @@
+import Input from "@/components/common/ui/input";
 import React from "react";
 
 export const LoginForm = () => {
@@ -17,37 +18,19 @@ export const LoginForm = () => {
         </div>
 
         <form action="" className="space-y-5">
-          <div>
-            <label
-              htmlFor="email"
-              className="mb-2 block text-sm font-semibold text-[#312e81]"
-            >
-              Email address
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              placeholder="john@example.com"
-              className="h-12 w-full rounded-xl border border-[#c7d2fe] bg-[#f8f7ff] px-4 text-sm outline-none transition focus:border-[#4f46e5] focus:bg-white focus:ring-4 focus:ring-[#4f46e5]/10"
-            />
-          </div>
+          <Input
+            id="email"
+            label="Email address"
+            type="email"
+            placeholder="john@example.com"
+          />
 
-          <div>
-            <label
-              htmlFor="password"
-              className="mb-2 block text-sm font-semibold text-[#312e81]"
-            >
-              Password
-            </label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              placeholder="Enter your password"
-              className="h-12 w-full rounded-xl border border-[#c7d2fe] bg-[#f8f7ff] px-4 text-sm outline-none transition focus:border-[#4f46e5] focus:bg-white focus:ring-4 focus:ring-[#4f46e5]/10"
-            />
-          </div>
+          <Input
+            id="password"
+            label="Password"
+            type="password"
+            placeholder="Enter your password"
+          />
 
           <div className="flex items-center justify-between text-sm">
             <label className="flex items-center gap-2 text-[#64748b]">
