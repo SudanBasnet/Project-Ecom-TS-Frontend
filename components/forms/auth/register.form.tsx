@@ -1,3 +1,5 @@
+import AuthFormFooter from "@/components/common/ui/auth-form-footer";
+import AuthFormHeader from "@/components/common/ui/auth-form-header";
 import Input from "@/components/common/ui/input";
 import React from "react";
 
@@ -5,23 +7,17 @@ export const RegisterForm = () => {
   return (
     <div className="flex items-center justify-center px-6 py-10 sm:px-10 lg:px-14 ">
       <div className="w-full max-w-md">
-        <div className="mb-10">
-          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#4f46e5]">
-            Create account
-          </p>
-          <h1 className="mt-3 text-4xl font-bold text-[#1e1b4b]">
-            Join Broadway Store
-          </h1>
-          <p className="mt-3 text-sm leading-6 text-[#64748b]">
-            Create your account to save favorites, track orders, and check out
-            faster.
-          </p>
-        </div>
+        <AuthFormHeader
+          eyebrow="Create account"
+          title="Join Broadway Store"
+          description="Create your account to save favorites, track orders, and check out faster."
+        />
 
         <form action="" className="space-y-5">
           <Input
             id="name"
             label="Full name"
+            required
             type="text"
             placeholder="John Doe"
           />
@@ -29,6 +25,7 @@ export const RegisterForm = () => {
           <Input
             id="email"
             label="Email address"
+            required
             type="email"
             placeholder="john@example.com"
           />
@@ -36,6 +33,7 @@ export const RegisterForm = () => {
           <Input
             id="password"
             label="Password"
+            required
             type="password"
             placeholder="Create a password"
           />
@@ -43,6 +41,7 @@ export const RegisterForm = () => {
           <Input
             id="confirm-password"
             label="Confirm password"
+            required
             type="password"
             placeholder="Confirm your password"
           />
@@ -60,12 +59,11 @@ export const RegisterForm = () => {
           </button>
         </form>
 
-        <p className="mt-8 text-center text-sm text-[#64748b]">
-          Already have an account?{" "}
-          <a href="/auth/login" className="font-bold text-[#4338ca]">
-            Sign in
-          </a>
-        </p>
+        <AuthFormFooter
+          text="Already have an account?"
+          href="/auth/login"
+          linkText="Sign in"
+        />
       </div>
     </div>
   );

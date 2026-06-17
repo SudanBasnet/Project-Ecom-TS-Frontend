@@ -1,3 +1,5 @@
+import AuthFormFooter from "@/components/common/ui/auth-form-footer";
+import AuthFormHeader from "@/components/common/ui/auth-form-header";
 import Input from "@/components/common/ui/input";
 import React from "react";
 
@@ -5,17 +7,11 @@ export const LoginForm = () => {
   return (
     <div className="flex items-center justify-center px-6 py-10 sm:px-10 lg:px-14">
       <div className="w-full max-w-md">
-        <div className="mb-10">
-          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#4f46e5]">
-            Welcome back
-          </p>
-          <h1 className="mt-3 text-4xl font-bold text-[#1e1b4b]">
-            Sign in to your account
-          </h1>
-          <p className="mt-3 text-sm leading-6 text-[#64748b]">
-            Login to access your account and continue where you left off.
-          </p>
-        </div>
+        <AuthFormHeader
+          eyebrow="Welcome back"
+          title="Sign in to your account"
+          description="Login to access your account and continue where you left off."
+        />
 
         <form action="" className="space-y-5">
           <Input
@@ -50,12 +46,11 @@ export const LoginForm = () => {
           </button>
         </form>
 
-        <p className="mt-8 text-center text-sm text-[#64748b]">
-          New here?{" "}
-          <a href="/auth/register" className="font-bold text-[#4338ca]">
-            Create an account
-          </a>
-        </p>
+        <AuthFormFooter
+          text="New here?"
+          href="/auth/register"
+          linkText="Create an account"
+        />
       </div>
     </div>
   );
