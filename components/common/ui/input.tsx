@@ -7,9 +7,17 @@ interface IProps {
   type: "text" | "email" | "password" | "number";
   placeholder: string;
   required?: boolean;
+  onChange?: React.ChangeEventHandler<HTMLInputElement>;
 }
 
-const Input = ({ id, label, placeholder, required = false, type }: IProps) => {
+const Input = ({
+  id,
+  label,
+  placeholder,
+  required = false,
+  type,
+  onChange,
+}: IProps) => {
   return (
     <div>
       <label
@@ -22,6 +30,7 @@ const Input = ({ id, label, placeholder, required = false, type }: IProps) => {
         )}
       </label>
       <input
+        onChange={onChange}
         id={id}
         name={id}
         required={required}

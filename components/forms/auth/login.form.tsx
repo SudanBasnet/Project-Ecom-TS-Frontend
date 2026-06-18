@@ -1,9 +1,29 @@
+"use client";
+
 import AuthFormFooter from "@/components/common/ui/auth-form-footer";
 import AuthFormHeader from "@/components/common/ui/auth-form-header";
+import Button from "@/components/common/ui/button";
 import Input from "@/components/common/ui/input";
-import React from "react";
+import React, { useState } from "react";
 
 export const LoginForm = () => {
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
+  const onEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("email", e.target.value);
+    setEmail(e.target.value);
+  };
+
+  const onPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("password", e.target.value);
+    setPassword(e.target.value);
+  };
+
+  const onSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log("form data", { email, password });
+  };
   return (
     <div className="flex items-center justify-center px-6 py-10 sm:px-10 lg:px-14">
       <div className="w-full max-w-md">
@@ -13,8 +33,9 @@ export const LoginForm = () => {
           description="Login to access your account and continue where you left off."
         />
 
-        <form action="" className="space-y-5">
+        <form action="" className="space-y-5" onSubmit={onSubmit}>
           <Input
+            onChange={onEmailChange}
             id="email"
             label="Email address"
             type="email"
@@ -22,6 +43,7 @@ export const LoginForm = () => {
           />
 
           <Input
+            onChange={onPasswordChange}
             id="password"
             label="Password"
             type="password"
@@ -41,9 +63,7 @@ export const LoginForm = () => {
             </a>
           </div>
 
-          <button className="h-12 w-full cursor-pointer rounded-xl bg-[#4f46e5] text-sm font-bold text-white shadow-lg shadow-[#4f46e5]/25 transition hover:bg-[#4338ca] focus:outline-none focus:ring-4 focus:ring-[#4f46e5]/20">
-            Sign In
-          </button>
+          <Button label="Sign In" type="submit" />
         </form>
 
         <AuthFormFooter
