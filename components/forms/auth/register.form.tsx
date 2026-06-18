@@ -6,22 +6,35 @@ import Button from "@/components/common/ui/button";
 import Input from "@/components/common/ui/input";
 import React, { useState } from "react";
 
+interface FormData {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  receiveUpdates: boolean;
+}
+
 export const RegisterForm = () => {
-  const [name, setName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [confirmPassword, setConfirmPassword] = useState<string>("");
-  const [receiveUpdates, setReceiveUpdates] = useState<boolean>(false);
+  const [formData, setFormData] = useState<FormData>({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    receiveUpdates: false,
+  });
+
+  const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    setFormData((previousData) => ({
+      ...previousData,
+      [name]: value,
+    }));
+  };
 
   const onSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("form data", {
-      name,
-      email,
-      password,
-      confirmPassword,
-      receiveUpdates,
-    });
+    console.log("form data", formData);
   };
 
   return (
@@ -36,7 +49,7 @@ export const RegisterForm = () => {
 
         <form action="" className="space-y-3.5" onSubmit={onSubmit}>
           <Input
-            onChange={(e) => setName(e.target.value)}
+            onChange={onInputChange}
             id="name"
             label="Full name"
             required
@@ -45,7 +58,7 @@ export const RegisterForm = () => {
           />
 
           <Input
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={onInputChange}
             id="email"
             label="Email address"
             required
@@ -54,7 +67,7 @@ export const RegisterForm = () => {
           />
 
           <Input
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={onInputChange}
             id="password"
             label="Password"
             required
@@ -63,8 +76,8 @@ export const RegisterForm = () => {
           />
 
           <Input
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            id="confirm-password"
+            onChange={onInputChange}
+            id="confirmPassword"
             label="Confirm password"
             required
             type="password"
@@ -74,8 +87,13 @@ export const RegisterForm = () => {
           <label className="flex items-start gap-3 text-sm leading-6 text-[#64748b]">
             <input
               type="checkbox"
-              checked={receiveUpdates}
-              onChange={(e) => setReceiveUpdates(e.target.checked)}
+              checked={formData.receiveUpdates}
+              onChange={(e) =>
+                setFormData((previousData) => ({
+                  ...previousData,
+                  receiveUpdates: e.target.checked,
+                }))
+              }
               className="mt-1 size-4 rounded border-[#c7d2fe] accent-[#4f46e5]"
             />
             I agree to receive account updates and order notifications.

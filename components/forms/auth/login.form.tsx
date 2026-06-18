@@ -6,23 +6,29 @@ import Button from "@/components/common/ui/button";
 import Input from "@/components/common/ui/input";
 import React, { useState } from "react";
 
+interface FormData {
+  email: string;
+  password: string;
+}
+
 export const LoginForm = () => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const [formData, setFormData] = useState<FormData>({
+    email: "",
+    password: "",
+  });
 
-  const onEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("email", e.target.value);
-    setEmail(e.target.value);
-  };
+  const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
 
-  const onPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("password", e.target.value);
-    setPassword(e.target.value);
+    setFormData((previousData) => ({
+      ...previousData,
+      [name]: value,
+    }));
   };
 
   const onSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("form data", { email, password });
+    console.log("form data", formData);
   };
   return (
     <div className="flex items-center justify-center px-6 py-10 sm:px-10 lg:px-14">
@@ -35,7 +41,7 @@ export const LoginForm = () => {
 
         <form action="" className="space-y-5" onSubmit={onSubmit}>
           <Input
-            onChange={onEmailChange}
+            onChange={onInputChange}
             id="email"
             label="Email address"
             type="email"
@@ -43,7 +49,7 @@ export const LoginForm = () => {
           />
 
           <Input
-            onChange={onPasswordChange}
+            onChange={onInputChange}
             id="password"
             label="Password"
             type="password"
