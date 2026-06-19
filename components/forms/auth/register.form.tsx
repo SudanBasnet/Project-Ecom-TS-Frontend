@@ -4,9 +4,9 @@ import AuthFormFooter from "@/components/common/ui/auth-form-footer";
 import AuthFormHeader from "@/components/common/ui/auth-form-header";
 import Button from "@/components/common/ui/button";
 import Input from "@/components/common/ui/input";
-import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 
-interface FormData {
+interface RegisterFormData {
   name: string;
   email: string;
   password: string;
@@ -15,26 +15,19 @@ interface FormData {
 }
 
 export const RegisterForm = () => {
-  const [formData, setFormData] = useState<FormData>({
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    receiveUpdates: false,
+  const { register, handleSubmit } = useForm<RegisterFormData>({
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      receiveUpdates: false,
+    },
   });
 
-  const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-
-    setFormData((previousData) => ({
-      ...previousData,
-      [name]: value,
-    }));
-  };
-
-  const onSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log("form data", formData);
+  const onSubmit = (data: RegisterFormData) => {
+    console.log("form data", data);
+    // HTTP POST /auth/register
   };
 
   return (
@@ -47,9 +40,10 @@ export const RegisterForm = () => {
           description="Create your account to save favorites, track orders, and check out faster."
         />
 
-        <form action="" className="space-y-3.5" onSubmit={onSubmit}>
+        <form className="space-y-3.5" onSubmit={handleSubmit(onSubmit)}>
           <Input
-            onChange={onInputChange}
+            register={register}
+            name="name"
             id="name"
             label="Full name"
             required
@@ -58,7 +52,8 @@ export const RegisterForm = () => {
           />
 
           <Input
-            onChange={onInputChange}
+            register={register}
+            name="email"
             id="email"
             label="Email address"
             required
@@ -67,7 +62,8 @@ export const RegisterForm = () => {
           />
 
           <Input
-            onChange={onInputChange}
+            register={register}
+            name="password"
             id="password"
             label="Password"
             required
@@ -76,7 +72,8 @@ export const RegisterForm = () => {
           />
 
           <Input
-            onChange={onInputChange}
+            register={register}
+            name="confirmPassword"
             id="confirmPassword"
             label="Confirm password"
             required
@@ -86,14 +83,8 @@ export const RegisterForm = () => {
 
           <label className="flex items-start gap-3 text-sm leading-6 text-[#64748b]">
             <input
+              {...register("receiveUpdates")}
               type="checkbox"
-              checked={formData.receiveUpdates}
-              onChange={(e) =>
-                setFormData((previousData) => ({
-                  ...previousData,
-                  receiveUpdates: e.target.checked,
-                }))
-              }
               className="mt-1 size-4 rounded border-[#c7d2fe] accent-[#4f46e5]"
             />
             I agree to receive account updates and order notifications.

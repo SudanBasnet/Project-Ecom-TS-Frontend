@@ -1,13 +1,16 @@
 import React from "react";
+import { UseFormRegister } from "react-hook-form";
 import { FaAsterisk } from "react-icons/fa";
 
 interface IProps {
+  name: string;
   label: string;
   id: string;
   type: "text" | "email" | "password" | "number";
   placeholder: string;
   required?: boolean;
-  onChange?: React.ChangeEventHandler<HTMLInputElement>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  register: UseFormRegister<any>;
 }
 
 const Input = ({
@@ -16,7 +19,8 @@ const Input = ({
   placeholder,
   required = false,
   type,
-  onChange,
+  name,
+  register,
 }: IProps) => {
   return (
     <div>
@@ -30,9 +34,8 @@ const Input = ({
         )}
       </label>
       <input
-        onChange={onChange}
+        {...register(name)}
         id={id}
-        name={id}
         required={required}
         type={type}
         placeholder={placeholder}

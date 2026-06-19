@@ -4,32 +4,21 @@ import AuthFormFooter from "@/components/common/ui/auth-form-footer";
 import AuthFormHeader from "@/components/common/ui/auth-form-header";
 import Button from "@/components/common/ui/button";
 import Input from "@/components/common/ui/input";
-import React, { useState } from "react";
-
-interface FormData {
-  email: string;
-  password: string;
-}
+import { useForm } from "react-hook-form";
 
 export const LoginForm = () => {
-  const [formData, setFormData] = useState<FormData>({
-    email: "",
-    password: "",
+  const { register, handleSubmit } = useForm({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
   });
 
-  const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-
-    setFormData((previousData) => ({
-      ...previousData,
-      [name]: value,
-    }));
+  const onSubmit = (data: { email: string; password: string }) => {
+    console.log("form data", data);
+    // HTTP POST /auth/login
   };
 
-  const onSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log("form data", formData);
-  };
   return (
     <div className="flex items-center justify-center px-6 py-10 sm:px-10 lg:px-14">
       <div className="w-full max-w-md">
@@ -39,9 +28,10 @@ export const LoginForm = () => {
           description="Login to access your account and continue where you left off."
         />
 
-        <form action="" className="space-y-5" onSubmit={onSubmit}>
+        <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
           <Input
-            onChange={onInputChange}
+            register={register}
+            name="email"
             id="email"
             label="Email address"
             type="email"
@@ -49,7 +39,8 @@ export const LoginForm = () => {
           />
 
           <Input
-            onChange={onInputChange}
+            register={register}
+            name="password"
             id="password"
             label="Password"
             type="password"
