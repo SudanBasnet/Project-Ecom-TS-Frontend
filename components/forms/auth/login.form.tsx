@@ -4,15 +4,29 @@ import AuthFormFooter from "@/components/common/ui/auth-form-footer";
 import AuthFormHeader from "@/components/common/ui/auth-form-header";
 import Button from "@/components/common/ui/button";
 import Input from "@/components/common/ui/input";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
+import * as yup from "yup";
 
-export const LoginForm = () => {
-  const { register, handleSubmit } = useForm({
+const loginSchema = yup.object({
+  email: yup.string().email().required(),
+  password: yup.string().required(),
+});
+
+const LoginForm = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
     defaultValues: {
       email: "",
       password: "",
     },
+    resolver: yupResolver(loginSchema),
   });
+
+  console.log(errors);
 
   const onSubmit = (data: { email: string; password: string }) => {
     console.log("form data", data);
@@ -36,6 +50,7 @@ export const LoginForm = () => {
             label="Email address"
             type="email"
             placeholder="john@example.com"
+            error={errors?.email?.message}
           />
 
           <Input
@@ -45,6 +60,7 @@ export const LoginForm = () => {
             label="Password"
             type="password"
             placeholder="Enter your password"
+            error={errors?.password?.message}
           />
 
           <div className="flex items-center justify-between text-sm">
