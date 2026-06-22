@@ -1,12 +1,13 @@
 "use client";
 
-import { loginSchema } from "@/app/schema/auth.schema";
+import { loginSchema } from "@/schema/auth.schema";
 import AuthFormFooter from "@/components/common/ui/auth-form-footer";
 import AuthFormHeader from "@/components/common/ui/auth-form-header";
 import Button from "@/components/common/ui/button";
 import Input from "@/components/common/ui/input";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
+import { TLoginInput } from "@/types/auth.types";
 
 const LoginForm = () => {
   const {
@@ -24,7 +25,7 @@ const LoginForm = () => {
 
   console.log(errors);
 
-  const onSubmit = (data: { email: string; password: string }) => {
+  const onSubmit = (data: TLoginInput) => {
     console.log("form data", data);
     // HTTP POST /auth/login
   };

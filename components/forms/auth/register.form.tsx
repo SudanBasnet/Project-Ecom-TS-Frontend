@@ -1,12 +1,13 @@
 "use client";
 
-import { registerSchema } from "@/app/schema/auth.schema";
+import { registerSchema } from "@/schema/auth.schema";
 import AuthFormFooter from "@/components/common/ui/auth-form-footer";
 import AuthFormHeader from "@/components/common/ui/auth-form-header";
 import Button from "@/components/common/ui/button";
 import Input from "@/components/common/ui/input";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
+import { TRegisterInput } from "@/types/auth.types";
 
 interface RegisterFormData {
   name: string;
@@ -33,7 +34,7 @@ export const RegisterForm = () => {
     resolver: yupResolver(registerSchema),
   });
 
-  const onSubmit = (data: RegisterFormData) => {
+  const onSubmit = (data: TRegisterInput) => {
     console.log("form data", data);
     // HTTP POST /auth/register
   };
