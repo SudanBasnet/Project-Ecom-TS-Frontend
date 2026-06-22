@@ -12,6 +12,7 @@ interface IProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   register: UseFormRegister<any>;
   error?: string;
+  isValid?: boolean;
 }
 
 const Input = ({
@@ -23,6 +24,7 @@ const Input = ({
   name,
   register,
   error,
+  isValid = false,
 }: IProps) => {
   return (
     <div>
@@ -31,14 +33,14 @@ const Input = ({
         className="mb-2 flex items-center gap-1.5 text-sm font-semibold text-[#312e81]"
       >
         {label}
-        {required && (
-          <FaAsterisk aria-hidden="true" className="size-2 text-[#ef4444]" />
+        {required && !isValid && (
+          <FaAsterisk className="size-2 text-[#ef4444]" />
         )}
       </label>
       <input
         {...register(name)}
         id={id}
-        // required={required}
+        required={required}
         type={type}
         placeholder={placeholder}
         className={`h-12 w-full rounded-xl border border-[#c7d2fe] bg-[#f8f7ff] px-4 text-sm outline-none transition ${error ? "focus:border-[#ff0000] focus:bg-white focus:ring-4 focus:ring-[#ff0000]/10" : "focus:border-[#4f46e5] focus:bg-white focus:ring-4 focus:ring-[#4f46e5]/10"}`}

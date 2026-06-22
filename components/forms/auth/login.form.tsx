@@ -1,24 +1,20 @@
 "use client";
 
+import { loginSchema } from "@/app/schema/auth.schema";
 import AuthFormFooter from "@/components/common/ui/auth-form-footer";
 import AuthFormHeader from "@/components/common/ui/auth-form-header";
 import Button from "@/components/common/ui/button";
 import Input from "@/components/common/ui/input";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import * as yup from "yup";
-
-const loginSchema = yup.object({
-  email: yup.string().email().required(),
-  password: yup.string().required(),
-});
 
 const LoginForm = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { dirtyFields, errors },
   } = useForm({
+    mode: "onChange",
     defaultValues: {
       email: "",
       password: "",
@@ -51,6 +47,8 @@ const LoginForm = () => {
             type="email"
             placeholder="john@example.com"
             error={errors?.email?.message}
+            isValid={dirtyFields.email && !errors.email}
+            required
           />
 
           <Input
@@ -61,6 +59,8 @@ const LoginForm = () => {
             type="password"
             placeholder="Enter your password"
             error={errors?.password?.message}
+            isValid={dirtyFields.password && !errors.password}
+            required
           />
 
           <div className="flex items-center justify-between text-sm">

@@ -1,9 +1,11 @@
 "use client";
 
+import { registerSchema } from "@/app/schema/auth.schema";
 import AuthFormFooter from "@/components/common/ui/auth-form-footer";
 import AuthFormHeader from "@/components/common/ui/auth-form-header";
 import Button from "@/components/common/ui/button";
 import Input from "@/components/common/ui/input";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 
 interface RegisterFormData {
@@ -15,7 +17,12 @@ interface RegisterFormData {
 }
 
 export const RegisterForm = () => {
-  const { register, handleSubmit } = useForm<RegisterFormData>({
+  const {
+    register,
+    handleSubmit,
+    formState: { dirtyFields, errors },
+  } = useForm<RegisterFormData>({
+    mode: "onChange",
     defaultValues: {
       name: "",
       email: "",
@@ -23,6 +30,7 @@ export const RegisterForm = () => {
       confirmPassword: "",
       receiveUpdates: false,
     },
+    resolver: yupResolver(registerSchema),
   });
 
   const onSubmit = (data: RegisterFormData) => {
@@ -49,6 +57,8 @@ export const RegisterForm = () => {
             required
             type="text"
             placeholder="John Doe"
+            error={errors.name?.message}
+            isValid={dirtyFields.name && !errors.name}
           />
 
           <Input
@@ -59,6 +69,8 @@ export const RegisterForm = () => {
             required
             type="email"
             placeholder="john@example.com"
+            error={errors.email?.message}
+            isValid={dirtyFields.email && !errors.email}
           />
 
           <Input
@@ -69,6 +81,8 @@ export const RegisterForm = () => {
             required
             type="password"
             placeholder="Create a password"
+            error={errors.password?.message}
+            isValid={dirtyFields.password && !errors.password}
           />
 
           <Input
@@ -79,6 +93,8 @@ export const RegisterForm = () => {
             required
             type="password"
             placeholder="Confirm your password"
+            error={errors.confirmPassword?.message}
+            isValid={dirtyFields.confirmPassword && !errors.confirmPassword}
           />
 
           <label className="flex items-start gap-3 text-sm leading-6 text-[#64748b]">
