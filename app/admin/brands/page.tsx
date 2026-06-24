@@ -1,9 +1,9 @@
+import PageTitle from "@/components/admin/page-title";
 import type { Metadata } from "next";
 import {
   FiEdit2,
   FiExternalLink,
   FiMoreHorizontal,
-  FiPlus,
   FiTag,
 } from "react-icons/fi";
 
@@ -52,22 +52,13 @@ const brands = [
 const BrandsPage = () => {
   return (
     <div className="mx-auto max-w-[1600px] space-y-6">
-      <section className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-        <div>
-          <p className="text-sm font-semibold text-indigo-600">
-            Catalogue partners
-          </p>
-          <h2 className="mt-1 text-3xl font-black tracking-tight text-slate-900">
-            Brands
-          </h2>
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
-            Keep product makers and supplier information tidy in one place.
-          </p>
-        </div>
-        <button className="inline-flex h-11 items-center justify-center gap-2 self-start rounded-xl bg-indigo-600 px-4 text-sm font-bold text-white shadow-lg shadow-indigo-200 transition hover:bg-indigo-700 sm:self-auto">
-          <FiPlus className="size-4" /> Add brand
-        </button>
-      </section>
+      <PageTitle
+        eyebrow="Catalogue partners"
+        title="All brands"
+        description="Keep product makers and supplier information tidy in one place."
+        linkText="Add new"
+        link="/admin/brands/create"
+      />
 
       <section className="rounded-2xl border border-slate-200 bg-gradient-to-r from-[#111136] to-indigo-900 p-6 text-white shadow-sm sm:p-8">
         <div className="flex flex-col justify-between gap-8 md:flex-row md:items-center">

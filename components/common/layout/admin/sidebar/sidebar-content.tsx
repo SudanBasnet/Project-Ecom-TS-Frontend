@@ -2,11 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FiHome, FiLogOut, FiX } from "react-icons/fi";
-import {
-  adminNavItems,
-  isAdminRouteActive,
-} from "../admin.config";
+import { FiX } from "react-icons/fi";
+import { adminNavItems, isAdminRouteActive } from "../admin.config";
 
 type SidebarLinksProps = {
   isOpen: boolean;
@@ -80,33 +77,6 @@ const SidebarLinks = ({ isOpen, onClose }: SidebarLinksProps) => {
             );
           })}
         </nav>
-
-        <div className="mt-8 rounded-2xl border border-white/10 bg-white/5 p-4">
-          <p className="text-[13px] font-semibold tracking-[-0.01em]">
-            View your storefront
-          </p>
-          <p className="mt-1 text-xs font-normal leading-5 tracking-normal text-indigo-200/70">
-            Preview the customer-facing catalogue in a new tab.
-          </p>
-          <Link
-            href="/"
-            target="_blank"
-            className="mt-4 flex items-center justify-center gap-2 rounded-xl bg-white px-3 py-2.5 text-xs font-semibold tracking-normal text-indigo-700 transition hover:bg-indigo-50"
-          >
-            <FiHome className="size-4" />
-            Open store
-          </Link>
-        </div>
-      </div>
-
-      <div className="border-t border-white/10 p-4">
-        <Link
-          href="/auth/login"
-          className="flex items-center gap-3 rounded-xl px-3 py-3 text-[14px] font-medium tracking-[-0.01em] text-indigo-100/75 transition hover:bg-white/10 hover:text-white"
-        >
-          <FiLogOut className="size-5" />
-          Sign out
-        </Link>
       </div>
     </aside>
   );

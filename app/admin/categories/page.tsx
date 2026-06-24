@@ -1,6 +1,7 @@
+import PageTitle from "@/components/admin/page-title";
 import { products } from "@/data/products";
 import type { Metadata } from "next";
-import { FiEdit2, FiLayers, FiMoreHorizontal, FiPlus } from "react-icons/fi";
+import { FiEdit2, FiLayers, FiMoreHorizontal } from "react-icons/fi";
 
 export const metadata: Metadata = {
   title: "Categories",
@@ -28,23 +29,13 @@ const categories = [...new Set(products.map((product) => product.category))].map
 const CategoriesPage = () => {
   return (
     <div className="mx-auto max-w-[1600px] space-y-6">
-      <section className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-        <div>
-          <p className="text-sm font-semibold text-indigo-600">
-            Catalogue organisation
-          </p>
-          <h2 className="mt-1 text-3xl font-black tracking-tight text-slate-900">
-            Product categories
-          </h2>
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
-            Group related products to make your catalogue easier to browse and
-            manage.
-          </p>
-        </div>
-        <button className="inline-flex h-11 items-center justify-center gap-2 self-start rounded-xl bg-indigo-600 px-4 text-sm font-bold text-white shadow-lg shadow-indigo-200 transition hover:bg-indigo-700 sm:self-auto">
-          <FiPlus className="size-4" /> Add category
-        </button>
-      </section>
+      <PageTitle
+        eyebrow="Catalogue organisation"
+        title="All categories"
+        description="Group related products to make your catalogue easier to browse and manage."
+        linkText="Add new"
+        link="/admin/categories/create"
+      />
 
       <section className="grid gap-4 sm:grid-cols-3">
         <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">

@@ -1,15 +1,7 @@
-import AdminHeader from "@/components/common/layout/admin/header";
-import Sidebar from "@/components/common/layout/admin/sidebar";
-import React from "react";
+import AdminShell from "@/components/common/layout/admin/admin-shell";
 
-const Layout = ({ children }: Readonly<{ children: React.ReactNode }>) => {
-  return (
-    <main className="h-100vh flex">
-      <Sidebar />
-      <AdminHeader />
-      {children}
-    </main>
-  );
-};
+const Layout = ({ children }: LayoutProps<"/admin">) => (
+  <AdminShell>{children}</AdminShell>
+);
 
 export default Layout;

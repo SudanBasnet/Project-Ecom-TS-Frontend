@@ -1,3 +1,4 @@
+import StoreChatbot from "@/components/common/chat/store-chatbot";
 import Footer from "@/components/common/layout/footer/footer";
 import Navbar from "@/components/common/layout/nav/navbar";
 
@@ -9,6 +10,7 @@ const StoreLayout = ({
       <Navbar />
       <div className="flex flex-1 flex-col overflow-x-hidden">{children}</div>
       <Footer />
+      <StoreChatbot />
     </div>
   );
 };

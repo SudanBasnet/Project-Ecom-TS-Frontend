@@ -1,7 +1,7 @@
+import PageTitle from "@/components/admin/page-title";
 import { products } from "@/data/products";
 import type { IconType } from "react-icons";
 import {
-  FiArrowUpRight,
   FiDollarSign,
   FiPackage,
   FiShoppingBag,
@@ -101,22 +101,13 @@ const statusStyles: Record<string, string> = {
 const DashboardPage = () => {
   return (
     <div className="mx-auto max-w-[1600px] space-y-6">
-      <section className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-        <div>
-          <p className="text-sm font-semibold text-indigo-600">
-            Tuesday, June 23
-          </p>
-          <h2 className="mt-1 text-3xl font-black tracking-tight text-slate-900">
-            Good morning, Admin.
-          </h2>
-          <p className="mt-2 text-sm text-slate-500">
-            Here&apos;s what&apos;s happening with your store today.
-          </p>
-        </div>
-        <button className="inline-flex h-11 items-center justify-center gap-2 self-start rounded-xl bg-indigo-600 px-4 text-sm font-bold text-white shadow-lg shadow-indigo-200 transition hover:bg-indigo-700 sm:self-auto">
-          View report <FiArrowUpRight className="size-4" />
-        </button>
-      </section>
+      <PageTitle
+        eyebrow="Admin overview"
+        title="Dashboard"
+        description="Here’s what’s happening with your store today."
+        linkText="View orders"
+        link="/admin/orders"
+      />
 
       <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {stats.map((stat) => (
