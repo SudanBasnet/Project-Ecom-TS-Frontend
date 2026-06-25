@@ -8,6 +8,7 @@ type Field = {
   type?: "text" | "number" | "url";
   multiline?: boolean;
   image?: boolean;
+  multiple?: boolean;
 };
 
 type CreateEntityFormProps = {
@@ -35,7 +36,11 @@ const CreateEntityForm = ({
         {fields.map((field) =>
           field.image ? (
             <div key={field.name} className="sm:col-span-2">
-              <ImageInput label={field.label} id={field.name} />
+              <ImageInput
+                label={field.label}
+                id={field.name}
+                multiple={field.multiple}
+              />
             </div>
           ) : (
             <label

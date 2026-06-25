@@ -40,6 +40,13 @@ const CreateProductPage = () => {
             name: "slug",
             placeholder: "e.g. everyday-backpack",
           },
+          {
+            label: "Product images",
+            name: "images",
+            placeholder: "",
+            image: true,
+            multiple: true,
+          },
         ]}
       />
     </main>
