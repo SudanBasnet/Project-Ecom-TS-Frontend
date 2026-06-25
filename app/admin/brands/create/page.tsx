@@ -26,6 +26,18 @@ const CreateBrandPage = () => {
             placeholder: "https://example.com",
             type: "url",
           },
+          {
+            label: "Description",
+            name: "description",
+            placeholder: "Write a short description of the brand...",
+            multiline: true,
+          },
+          {
+            label: "Brand image",
+            name: "image",
+            placeholder: "",
+            image: true,
+          },
         ]}
       />
     </main>

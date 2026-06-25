@@ -1,10 +1,13 @@
 import AdminListCard from "./list-card";
+import ImageInput from "@/components/common/ui/image-input";
 
 type Field = {
   label: string;
   name: string;
   placeholder: string;
   type?: "text" | "number" | "url";
+  multiline?: boolean;
+  image?: boolean;
 };
 
 type CreateEntityFormProps = {
@@ -29,19 +32,39 @@ const CreateEntityForm = ({
       </div>
 
       <form className="mt-6 grid max-w-3xl gap-5 sm:grid-cols-2">
-        {fields.map((field) => (
-          <label key={field.name} className="grid gap-2">
-            <span className="text-sm font-semibold text-slate-700">
-              {field.label}
-            </span>
-            <input
-              type={field.type ?? "text"}
-              name={field.name}
-              placeholder={field.placeholder}
-              className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-indigo-300 focus:bg-white focus:ring-4 focus:ring-indigo-100"
-            />
-          </label>
-        ))}
+        {fields.map((field) =>
+          field.image ? (
+            <div key={field.name} className="sm:col-span-2">
+              <ImageInput label={field.label} id={field.name} />
+            </div>
+          ) : (
+            <label
+              key={field.name}
+              className={`grid gap-2 ${
+                field.multiline ? "sm:col-span-2" : ""
+              }`}
+            >
+              <span className="text-sm font-semibold text-slate-700">
+                {field.label}
+              </span>
+              {field.multiline ? (
+                <textarea
+                  name={field.name}
+                  placeholder={field.placeholder}
+                  rows={5}
+                  className="min-h-32 resize-y rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-indigo-300 focus:bg-white focus:ring-4 focus:ring-indigo-100"
+                />
+              ) : (
+                <input
+                  type={field.type ?? "text"}
+                  name={field.name}
+                  placeholder={field.placeholder}
+                  className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-indigo-300 focus:bg-white focus:ring-4 focus:ring-indigo-100"
+                />
+              )}
+            </label>
+          ),
+        )}
 
         <div className="flex gap-3 sm:col-span-2">
           <button
