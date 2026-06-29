@@ -8,6 +8,39 @@ import Input from "@/components/common/ui/input";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { TLoginInput } from "@/types/auth.types";
+import { login } from "@/api/auth.api";
+import axios from "axios";
+import { toast } from "react-toastify";
+
+const getErrorMessage = (error: unknown) => {
+  if (axios.isAxiosError(error)) {
+    const data = error.response?.data;
+
+    if (
+      data &&
+      typeof data === "object" &&
+      "message" in data &&
+      typeof data.message === "string"
+    ) {
+      return data.message;
+    }
+  }
+
+  return "Unable to login. Please try again.";
+};
+
+const getSuccessMessage = (response: unknown) => {
+  if (
+    response &&
+    typeof response === "object" &&
+    "message" in response &&
+    typeof response.message === "string"
+  ) {
+    return response.message;
+  }
+
+  return "Login successful";
+};
 
 const LoginForm = () => {
   const {
@@ -25,9 +58,14 @@ const LoginForm = () => {
 
   console.log(errors);
 
-  const onSubmit = (data: TLoginInput) => {
-    console.log("form data", data);
-    // HTTP POST /auth/login
+  const onSubmit = async (data: TLoginInput) => {
+    try {
+      const response = await login(data);
+      toast.success(getSuccessMessage(response));
+      console.log(response);
+    } catch (error) {
+      toast.error(getErrorMessage(error));
+    }
   };
 
   return (
