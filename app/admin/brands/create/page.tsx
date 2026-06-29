@@ -1,5 +1,5 @@
-import CreateEntityForm from "@/components/admin/create-entity-form";
 import PageTitle from "@/components/admin/page-title";
+import BrandForm from "@/components/forms/admin/brand.form";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -16,30 +16,7 @@ const CreateBrandPage = () => {
         link="/admin/brands"
         backLink
       />
-      <CreateEntityForm
-        entityName="Brand"
-        fields={[
-          { label: "Brand name", name: "name", placeholder: "e.g. Northstar" },
-          {
-            label: "Website",
-            name: "website",
-            placeholder: "https://example.com",
-            type: "url",
-          },
-          {
-            label: "Description",
-            name: "description",
-            placeholder: "Write a short description of the brand...",
-            multiline: true,
-          },
-          {
-            label: "Brand image",
-            name: "image",
-            placeholder: "",
-            image: true,
-          },
-        ]}
-      />
+      <BrandForm />
     </main>
   );
 };
