@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import ToastProvider from "@/components/common/ui/toast-provider";
+import ReactQueryProvider from "@/providers/react-query-provider";
 import "./globals.css";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -33,7 +34,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} min-h-screen antialiased tracking-wider`}
     >
       <body className="min-h-screen">
-        {children}
+        <ReactQueryProvider>{children}</ReactQueryProvider>
         <ToastProvider />
       </body>
     </html>

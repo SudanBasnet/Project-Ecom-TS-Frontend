@@ -11,6 +11,8 @@ import { TLoginInput } from "@/types/auth.types";
 import { login } from "@/api/auth.api";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 
 const getErrorMessage = (error: unknown) => {
   if (axios.isAxiosError(error)) {
@@ -55,17 +57,23 @@ const LoginForm = () => {
     },
     resolver: yupResolver(loginSchema),
   });
+  const router = useRouter();
+  const { mutate, isPending } = useMutation({
+    mutationFn: login,
+  });
 
-  console.log(errors);
-
-  const onSubmit = async (data: TLoginInput) => {
-    try {
-      const response = await login(data);
-      toast.success(getSuccessMessage(response));
-      console.log(response);
-    } catch (error) {
-      toast.error(getErrorMessage(error));
-    }
+  const onSubmit = (data: TLoginInput) => {
+    mutate(data, {
+      onSuccess: (response) => {
+        toast.success(getSuccessMessage(response));
+        router.replace("/admin");
+        console.log("on Success", response);
+      },
+      onError: (error) => {
+        toast.error(getErrorMessage(error));
+        console.log("on Error", error);
+      },
+    });
   };
 
   return (
@@ -115,7 +123,11 @@ const LoginForm = () => {
             </a>
           </div>
 
-          <Button label="Sign In" type="submit" />
+          <Button
+            label={isPending ? "Signing In..." : "Sign In"}
+            type="submit"
+            disabled={isPending}
+          />
         </form>
 
         <AuthFormFooter
