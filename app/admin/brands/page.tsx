@@ -1,23 +1,22 @@
+import BrandTable, {
+  type BrandTableRow,
+} from "@/components/admin/brand-table";
 import PageTitle from "@/components/admin/page-title";
 import type { Metadata } from "next";
-import {
-  FiEdit2,
-  FiExternalLink,
-  FiMoreHorizontal,
-  FiTag,
-} from "react-icons/fi";
+import { FiMoreHorizontal, FiTag } from "react-icons/fi";
 
 export const metadata: Metadata = {
   title: "Brands",
 };
 
-const brands = [
+const brands: BrandTableRow[] = [
   {
     name: "Northstar",
     initials: "NS",
     products: 14,
     colour: "bg-indigo-600",
     website: "northstar.example",
+    status: "Active",
   },
   {
     name: "Cloudline",
@@ -25,6 +24,7 @@ const brands = [
     products: 9,
     colour: "bg-sky-500",
     website: "cloudline.example",
+    status: "Active",
   },
   {
     name: "Atelier",
@@ -32,6 +32,7 @@ const brands = [
     products: 12,
     colour: "bg-slate-800",
     website: "atelier.example",
+    status: "Active",
   },
   {
     name: "Solis",
@@ -39,6 +40,7 @@ const brands = [
     products: 7,
     colour: "bg-amber-500",
     website: "solis.example",
+    status: "Active",
   },
   {
     name: "Pulse",
@@ -46,6 +48,7 @@ const brands = [
     products: 10,
     colour: "bg-fuchsia-500",
     website: "pulse.example",
+    status: "Active",
   },
 ];
 
@@ -106,60 +109,7 @@ const BrandsPage = () => {
           </button>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[720px] text-left">
-            <thead className="bg-slate-50 text-[10px] font-bold uppercase tracking-[0.12em] text-slate-400">
-              <tr>
-                <th className="px-6 py-3">Brand</th>
-                <th className="px-6 py-3">Website</th>
-                <th className="px-6 py-3">Products</th>
-                <th className="px-6 py-3">Status</th>
-                <th className="px-6 py-3 text-right">Action</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 text-sm">
-              {brands.map((brand) => (
-                <tr key={brand.name} className="transition hover:bg-slate-50/80">
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-3">
-                      <span
-                        className={`grid size-10 place-items-center rounded-xl text-xs font-black text-white ${brand.colour}`}
-                      >
-                        {brand.initials}
-                      </span>
-                      <span className="font-bold text-slate-800">
-                        {brand.name}
-                      </span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className="inline-flex items-center gap-1.5 text-slate-500">
-                      {brand.website}
-                      <FiExternalLink className="size-3.5" />
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 font-semibold text-slate-700">
-                    {brand.products}
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-bold text-emerald-700 ring-1 ring-inset ring-emerald-600/10">
-                      Active
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 text-right">
-                    <button
-                      type="button"
-                      aria-label={`Edit ${brand.name}`}
-                      className="inline-grid size-9 place-items-center rounded-lg text-slate-400 transition hover:bg-indigo-50 hover:text-indigo-600"
-                    >
-                      <FiEdit2 className="size-4" />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <BrandTable brands={brands} />
       </section>
     </div>
   );
