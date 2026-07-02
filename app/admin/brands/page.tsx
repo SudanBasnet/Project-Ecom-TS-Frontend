@@ -1,3 +1,4 @@
+import { getBrands, getProducts } from "@/api/catalog.api";
 import BrandTable, {
   type BrandTableRow,
 } from "@/components/admin/brand-table";
@@ -5,54 +6,45 @@ import PageTitle from "@/components/admin/page-title";
 import type { Metadata } from "next";
 import { FiMoreHorizontal, FiTag } from "react-icons/fi";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Brands",
 };
 
-const brands: BrandTableRow[] = [
-  {
-    name: "Northstar",
-    initials: "NS",
-    products: 14,
-    colour: "bg-indigo-600",
-    website: "northstar.example",
-    status: "Active",
-  },
-  {
-    name: "Cloudline",
-    initials: "CL",
-    products: 9,
-    colour: "bg-sky-500",
-    website: "cloudline.example",
-    status: "Active",
-  },
-  {
-    name: "Atelier",
-    initials: "AT",
-    products: 12,
-    colour: "bg-slate-800",
-    website: "atelier.example",
-    status: "Active",
-  },
-  {
-    name: "Solis",
-    initials: "SO",
-    products: 7,
-    colour: "bg-amber-500",
-    website: "solis.example",
-    status: "Active",
-  },
-  {
-    name: "Pulse",
-    initials: "PL",
-    products: 10,
-    colour: "bg-fuchsia-500",
-    website: "pulse.example",
-    status: "Active",
-  },
+const colours = [
+  "bg-indigo-600",
+  "bg-sky-500",
+  "bg-slate-800",
+  "bg-amber-500",
+  "bg-fuchsia-500",
 ];
 
-const BrandsPage = () => {
+const BrandsPage = async () => {
+  const [brands, products] = await Promise.all([
+    getBrands().catch(() => []),
+    getProducts().catch(() => []),
+  ]);
+
+  const rows: BrandTableRow[] = brands.map((brand, index) => ({
+    name: brand.name,
+    initials: brand.name
+      .split(" ")
+      .map((part) => part[0])
+      .join("")
+      .slice(0, 2)
+      .toUpperCase(),
+    products: products.filter((product) => {
+      const productBrand = product.brand;
+      return typeof productBrand === "object"
+        ? productBrand?._id === brand._id
+        : productBrand === brand._id;
+    }).length,
+    colour: colours[index % colours.length],
+    website: brand.description || "No description",
+    status: "Active",
+  }));
+
   return (
     <div className="mx-auto max-w-[1600px] space-y-6">
       <PageTitle
@@ -70,7 +62,7 @@ const BrandsPage = () => {
               <FiTag className="size-5" />
             </div>
             <h3 className="mt-5 text-2xl font-black">
-              {brands.length} trusted catalogue brands
+              {rows.length} trusted catalogue brands
             </h3>
             <p className="mt-2 max-w-xl text-sm leading-6 text-indigo-100/65">
               Every brand is active and currently visible across the Broadway
@@ -80,7 +72,7 @@ const BrandsPage = () => {
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
             <div className="rounded-xl bg-white/8 px-5 py-4">
               <p className="text-2xl font-black">
-                {brands.reduce((total, brand) => total + brand.products, 0)}
+                {rows.reduce((total, brand) => total + brand.products, 0)}
               </p>
               <p className="mt-1 text-[11px] text-indigo-200/70">Products</p>
             </div>
@@ -109,7 +101,7 @@ const BrandsPage = () => {
           </button>
         </div>
 
-        <BrandTable brands={brands} />
+        <BrandTable brands={rows} />
       </section>
     </div>
   );

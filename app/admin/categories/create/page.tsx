@@ -23,12 +23,20 @@ const CreateCategoryPage = () => {
             label: "Category name",
             name: "name",
             placeholder: "e.g. Electronics",
+            required: true,
           },
           {
-            label: "Display order",
-            name: "order",
-            placeholder: "e.g. 1",
-            type: "number",
+            label: "Description",
+            name: "description",
+            placeholder: "Describe this category in at least 25 characters",
+            multiline: true,
+          },
+          {
+            label: "Category image",
+            name: "image",
+            placeholder: "",
+            image: true,
+            required: true,
           },
         ]}
       />

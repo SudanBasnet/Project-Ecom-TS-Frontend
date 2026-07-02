@@ -1,5 +1,5 @@
-import ProductVisual from "@/components/common/ui/product-visual";
-import { getProductById, products } from "@/data/products";
+import { getCategoryName, getPrice, getProduct } from "@/api/catalog.api";
+import ProductMedia from "@/components/common/ui/product-media";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { FaHeart, FaShoppingCart } from "react-icons/fa";
@@ -8,13 +8,9 @@ type ProductPageProps = {
   params: Promise<{ id: string }>;
 };
 
-export function generateStaticParams() {
-  return products.map((product) => ({ id: product.id }));
-}
-
 export default async function ProductDetailPage({ params }: ProductPageProps) {
   const { id } = await params;
-  const product = getProductById(id);
+  const product = await getProduct(id).catch(() => null);
 
   if (!product) {
     notFound();
@@ -31,27 +27,28 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
         </Link>
 
         <div className="mt-6 grid overflow-hidden rounded-[2rem] border border-[#e0e7ff] bg-white shadow-xl shadow-indigo-100 lg:grid-cols-2">
-          <ProductVisual
+          <ProductMedia
             name={product.name}
-            accent={product.accent}
+            imageUrl={product.cover_image?.path}
             className="min-h-96"
           />
           <div className="flex flex-col justify-center p-8 sm:p-12">
             <p className="text-sm font-bold uppercase tracking-[0.16em] text-[#6366f1]">
-              {product.category}
+              {getCategoryName(product.category)}
             </p>
             <h1 className="mt-3 text-4xl font-black text-[#1e1b4b]">
               {product.name}
             </h1>
             <p className="mt-4 text-3xl font-bold text-[#4338ca]">
-              ${product.price}
+              ${getPrice(product).toFixed(2)}
             </p>
             <p className="mt-6 leading-7 text-[#64748b]">
               {product.description}
             </p>
             <p className="mt-4 text-sm leading-6 text-[#94a3b8]">
-              This is dummy product information. Add stock, variants,
-              specifications, reviews, and real purchasing behaviour here later.
+              {product.stock > 0
+                ? `${product.stock} item${product.stock === 1 ? "" : "s"} in stock.`
+                : "Currently out of stock."}
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <button

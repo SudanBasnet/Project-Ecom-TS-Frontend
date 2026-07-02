@@ -67,11 +67,9 @@ const LoginForm = () => {
       onSuccess: (response) => {
         toast.success(getSuccessMessage(response));
         router.replace("/admin");
-        console.log("on Success", response);
       },
       onError: (error) => {
         toast.error(getErrorMessage(error));
-        console.log("on Error", error);
       },
     });
   };

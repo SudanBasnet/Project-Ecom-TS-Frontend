@@ -1,16 +1,17 @@
 import { TLoginInput } from "@/types/auth.types";
-import axios from "axios";
+import { http } from "./http";
 
 //!login API
 export const login = async (data: TLoginInput) => {
-  try {
-    const response = await axios.post(
-      "http://localhost:8080/api/v1/auth/login",
-      data,
-    );
-    return response.data;
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
+  const response = await http.post("/auth/login", data);
+  return response.data;
+};
+
+export const registerAccount = async (data: {
+  full_name: string;
+  email: string;
+  password: string;
+}) => {
+  const response = await http.post("/auth/register", data);
+  return response.data;
 };

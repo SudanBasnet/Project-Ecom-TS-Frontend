@@ -1,32 +1,44 @@
+import { getCategories, getProducts } from "@/api/catalog.api";
 import PageTitle from "@/components/admin/page-title";
-import { products } from "@/data/products";
 import type { Metadata } from "next";
 import { FiEdit2, FiLayers, FiMoreHorizontal } from "react-icons/fi";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Categories",
 };
 
-const categoryAccents: Record<string, string> = {
-  Bags: "from-indigo-500 to-violet-400",
-  Footwear: "from-sky-500 to-cyan-300",
-  Accessories: "from-slate-700 to-slate-400",
-  Clothing: "from-amber-400 to-orange-300",
-  Electronics: "from-fuchsia-500 to-pink-400",
-  Home: "from-emerald-500 to-teal-300",
-};
+const categoryAccents = [
+  "from-indigo-500 to-violet-400",
+  "from-sky-500 to-cyan-300",
+  "from-slate-700 to-slate-400",
+  "from-amber-400 to-orange-300",
+  "from-fuchsia-500 to-pink-400",
+  "from-emerald-500 to-teal-300",
+];
 
-const categories = [...new Set(products.map((product) => product.category))].map(
-  (name, index) => ({
-    name,
-    products: products.filter((product) => product.category === name).length,
+const CategoriesPage = async () => {
+  const [categories, products] = await Promise.all([
+    getCategories().catch(() => []),
+    getProducts().catch(() => []),
+  ]);
+
+  const rows = categories.map((category, index) => ({
+    ...category,
+    products: products.filter((product) => {
+      const productCategory = product.category;
+      return typeof productCategory === "object"
+        ? productCategory?._id === category._id
+        : productCategory === category._id;
+    }).length,
     status: "Active",
-    updated: index < 2 ? "Today" : `${index + 1} days ago`,
-    accent: categoryAccents[name],
-  }),
-);
+    updated: category.updatedAt
+      ? new Date(category.updatedAt).toLocaleDateString()
+      : "Recently",
+    accent: categoryAccents[index % categoryAccents.length],
+  }));
 
-const CategoriesPage = () => {
   return (
     <div className="mx-auto max-w-[1600px] space-y-6">
       <PageTitle
@@ -43,7 +55,7 @@ const CategoriesPage = () => {
             <FiLayers className="size-5" />
           </div>
           <p className="mt-4 text-2xl font-black text-slate-900">
-            {categories.length}
+            {rows.length}
           </p>
           <p className="mt-1 text-xs font-medium text-slate-500">
             Total categories
@@ -54,7 +66,7 @@ const CategoriesPage = () => {
             Active
           </p>
           <p className="mt-4 text-2xl font-black text-emerald-600">
-            {categories.length}
+            {rows.length}
           </p>
           <p className="mt-1 text-xs font-medium text-slate-500">
             Visible on storefront
@@ -76,7 +88,7 @@ const CategoriesPage = () => {
           <div>
             <h3 className="font-bold text-slate-900">All categories</h3>
             <p className="mt-1 text-xs text-slate-500">
-              {categories.length} categories in your store
+              {rows.length} categories in your store
             </p>
           </div>
           <button
@@ -89,9 +101,9 @@ const CategoriesPage = () => {
         </div>
 
         <div className="grid gap-4 p-4 sm:grid-cols-2 xl:grid-cols-3 sm:p-6">
-          {categories.map((category) => (
+          {rows.map((category) => (
             <article
-              key={category.name}
+              key={category._id}
               className="group rounded-2xl border border-slate-200 p-4 transition hover:-translate-y-0.5 hover:border-indigo-200 hover:shadow-lg hover:shadow-indigo-100/60"
             >
               <div className="flex items-start gap-4">

@@ -1,7 +1,14 @@
+import {
+  getCategoryName,
+  getPrice,
+  getProducts,
+} from "@/api/catalog.api";
+import ProductMedia from "@/components/common/ui/product-media";
 import ProductVisual from "@/components/common/ui/product-visual";
-import { products } from "@/data/products";
 import Link from "next/link";
 import { FaArrowRight, FaShieldAlt, FaShippingFast } from "react-icons/fa";
+
+export const dynamic = "force-dynamic";
 
 const benefits = [
   {
@@ -16,7 +23,10 @@ const benefits = [
   },
 ];
 
-const HomePage = () => {
+const HomePage = async () => {
+  const products = await getProducts().catch(() => []);
+  const featuredProducts = products.slice(0, 3);
+
   return (
     <main className="flex-1">
       <section className="bg-[#eef2ff] px-6 py-16 text-[#1e1b4b] sm:py-24">
@@ -29,8 +39,7 @@ const HomePage = () => {
               Useful products, picked for everyday life.
             </h1>
             <p className="mt-6 max-w-xl text-lg leading-8 text-[#64748b]">
-              This is reusable placeholder copy for the storefront hero. Replace
-              it later with your campaign, offer, or brand message.
+              Browse the latest products from your connected backend catalogue.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
@@ -76,32 +85,37 @@ const HomePage = () => {
           </div>
 
           <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {products.slice(0, 3).map((product) => (
+            {featuredProducts.map((product) => (
               <Link
-                key={product.id}
-                href={`/products/${product.id}`}
+                key={product._id}
+                href={`/products/${product._id}`}
                 className="group overflow-hidden rounded-3xl border border-[#e0e7ff] bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
               >
-                <ProductVisual
+                <ProductMedia
                   name={product.name}
-                  accent={product.accent}
+                  imageUrl={product.cover_image?.path}
                 />
                 <div className="p-5">
                   <p className="text-sm font-semibold text-[#6366f1]">
-                    {product.category}
+                    {getCategoryName(product.category)}
                   </p>
                   <div className="mt-1 flex items-center justify-between gap-4">
                     <h3 className="text-lg font-bold text-[#1e1b4b]">
                       {product.name}
                     </h3>
                     <span className="font-bold text-[#4338ca]">
-                      ${product.price}
+                      ${getPrice(product).toFixed(2)}
                     </span>
                   </div>
                 </div>
               </Link>
             ))}
           </div>
+          {featuredProducts.length === 0 && (
+            <p className="mt-8 rounded-2xl border border-dashed border-slate-300 p-8 text-center text-sm font-semibold text-slate-500">
+              Add products in the admin area to feature them here.
+            </p>
+          )}
 
           <div className="mt-12 grid gap-4 sm:grid-cols-2">
             {benefits.map((benefit) => (

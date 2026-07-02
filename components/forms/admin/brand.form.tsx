@@ -1,8 +1,8 @@
 "use client";
 
+import { createBrand } from "@/api/admin.api";
 import AdminListCard from "@/components/admin/list-card";
 import Button from "@/components/common/ui/button";
-import ImageInput from "@/components/common/ui/image-input";
 import Input from "@/components/common/ui/input";
 import {
   brandSchema,
@@ -10,7 +10,10 @@ import {
   TBrandInput,
 } from "@/schema/brand.schema";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 const BrandForm = () => {
   const {
@@ -22,13 +25,25 @@ const BrandForm = () => {
     defaultValues: {
       name: "",
       description: "",
-      logo: undefined,
     },
     resolver: yupResolver(brandSchema),
   });
+  const router = useRouter();
+  const { mutate, isPending } = useMutation({
+    mutationFn: createBrand,
+  });
 
   const onSubmit = (data: TBrandInput) => {
-    console.log("brand data", data);
+    mutate(data, {
+      onSuccess: () => {
+        toast.success("Brand created");
+        router.push("/admin/brands");
+        router.refresh();
+      },
+      onError: () => {
+        toast.error("Unable to create brand");
+      },
+    });
   };
 
   return (
@@ -56,14 +71,6 @@ const BrandForm = () => {
           required
         />
 
-        <ImageInput
-          label="Logo"
-          id="logo"
-          error={errors.logo?.message}
-          register={register("logo")}
-          required
-        />
-
         <Input
           label="Description"
           name="description"
@@ -77,7 +84,11 @@ const BrandForm = () => {
         />
 
         <div className="max-w-48">
-          <Button label="Save brand" type="submit" />
+          <Button
+            label={isPending ? "Saving..." : "Save brand"}
+            type="submit"
+            disabled={isPending}
+          />
         </div>
       </form>
     </AdminListCard>

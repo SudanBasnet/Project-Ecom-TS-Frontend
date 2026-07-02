@@ -1,16 +1,23 @@
-import ProductVisual from "@/components/common/ui/product-visual";
-import { products } from "@/data/products";
+import {
+  getCategoryName,
+  getPrice,
+  getProducts,
+} from "@/api/catalog.api";
+import ProductMedia from "@/components/common/ui/product-media";
 import type { Metadata } from "next";
 import Link from "next/link";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Products",
 };
 
-const ProductsPage = () => {
+const ProductsPage = async () => {
+  const products = await getProducts().catch(() => []);
   const categories = [
     "All",
-    ...new Set(products.map((product) => product.category)),
+    ...new Set(products.map((product) => getCategoryName(product.category))),
   ];
 
   return (
@@ -26,8 +33,7 @@ const ProductsPage = () => {
                 Find your next favourite.
               </h1>
               <p className="mt-4 max-w-xl leading-7 text-[#64748b]">
-                Browse the starter catalogue. These products are shared dummy
-                data that can later be replaced by your API response.
+                Browse products loaded directly from your backend catalogue.
               </p>
             </div>
             <p className="rounded-full border border-[#c7d2fe] bg-white px-4 py-2 text-sm font-semibold text-[#4338ca] shadow-sm">
@@ -57,33 +63,33 @@ const ProductsPage = () => {
           <div className="mt-7 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {products.map((product) => (
               <article
-                key={product.id}
+                key={product._id}
                 className="group overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-[#c7d2fe] hover:shadow-xl hover:shadow-indigo-100"
               >
                 <div className="overflow-hidden">
-                  <ProductVisual
+                  <ProductMedia
                     name={product.name}
-                    accent={product.accent}
+                    imageUrl={product.cover_image?.path}
                     className="aspect-[4/3] transition duration-500 group-hover:scale-105"
                   />
                 </div>
                 <div className="p-5">
                   <p className="text-sm font-semibold text-[#6366f1]">
-                    {product.category}
+                    {getCategoryName(product.category)}
                   </p>
                   <div className="mt-1 flex items-start justify-between gap-4">
                     <h2 className="text-xl font-bold text-[#1e1b4b]">
                       {product.name}
                     </h2>
                     <span className="font-bold text-[#4338ca]">
-                      ${product.price}
+                      ${getPrice(product).toFixed(2)}
                     </span>
                   </div>
                   <p className="mt-3 line-clamp-2 text-sm leading-6 text-[#64748b]">
                     {product.description}
                   </p>
                   <Link
-                    href={`/products/${product.id}`}
+                    href={`/products/${product._id}`}
                     className="mt-5 inline-flex w-full items-center justify-center rounded-xl bg-[#eef2ff] px-4 py-3 text-sm font-bold text-[#4338ca] transition hover:bg-[#4f46e5] hover:text-white"
                   >
                     View details
@@ -92,6 +98,11 @@ const ProductsPage = () => {
               </article>
             ))}
           </div>
+          {products.length === 0 && (
+            <p className="mt-10 rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center text-sm font-semibold text-slate-500">
+              No backend products found yet.
+            </p>
+          )}
         </div>
       </section>
     </main>

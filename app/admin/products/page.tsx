@@ -1,15 +1,22 @@
+import {
+  getCategoryName,
+  getPrice,
+  getProducts,
+} from "@/api/catalog.api";
 import PageTitle from "@/components/admin/page-title";
-import { products } from "@/data/products";
 import type { Metadata } from "next";
 import { FiEdit2, FiMoreHorizontal, FiPackage } from "react-icons/fi";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Products",
 };
 
-const ProductsPage = () => {
+const ProductsPage = async () => {
+  const products = await getProducts().catch(() => []);
   const inventoryValue = products.reduce(
-    (total, product) => total + product.price,
+    (total, product) => total + getPrice(product),
     0,
   );
 
@@ -89,11 +96,11 @@ const ProductsPage = () => {
             </thead>
             <tbody className="divide-y divide-slate-100 text-sm">
               {products.map((product) => (
-                <tr key={product.id} className="transition hover:bg-slate-50/80">
+                <tr key={product._id} className="transition hover:bg-slate-50/80">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
                       <span
-                        className={`grid size-10 shrink-0 place-items-center rounded-xl bg-gradient-to-br text-white ${product.accent}`}
+                        className="grid size-10 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-indigo-600 to-sky-500 text-white"
                       >
                         <FiPackage className="size-4" />
                       </span>
@@ -106,10 +113,10 @@ const ProductsPage = () => {
                     </div>
                   </td>
                   <td className="px-6 py-4 text-slate-500">
-                    {product.category}
+                    {getCategoryName(product.category)}
                   </td>
                   <td className="px-6 py-4 font-semibold text-slate-700">
-                    ${product.price.toFixed(2)}
+                    ${getPrice(product).toFixed(2)}
                   </td>
                   <td className="px-6 py-4">
                     <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-bold text-emerald-700 ring-1 ring-inset ring-emerald-600/10">

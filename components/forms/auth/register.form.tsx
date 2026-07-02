@@ -1,12 +1,16 @@
 "use client";
 
+import { registerAccount } from "@/api/auth.api";
 import { registerSchema } from "@/schema/auth.schema";
 import AuthFormFooter from "@/components/common/ui/auth-form-footer";
 import AuthFormHeader from "@/components/common/ui/auth-form-header";
 import Button from "@/components/common/ui/button";
 import Input from "@/components/common/ui/input";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 import { TRegisterInput } from "@/types/auth.types";
 
 interface RegisterFormData {
@@ -33,10 +37,28 @@ export const RegisterForm = () => {
     },
     resolver: yupResolver(registerSchema),
   });
+  const router = useRouter();
+  const { mutate, isPending } = useMutation({
+    mutationFn: registerAccount,
+  });
 
   const onSubmit = (data: TRegisterInput) => {
-    console.log("form data", data);
-    // HTTP POST /auth/register
+    mutate(
+      {
+        full_name: data.name,
+        email: data.email,
+        password: data.password,
+      },
+      {
+        onSuccess: () => {
+          toast.success("Account created");
+          router.push("/auth/login");
+        },
+        onError: () => {
+          toast.error("Unable to create account");
+        },
+      },
+    );
   };
 
   return (
@@ -107,7 +129,11 @@ export const RegisterForm = () => {
             I agree to receive account updates and order notifications.
           </label>
 
-          <Button label="Create Account" type="submit" />
+          <Button
+            label={isPending ? "Creating..." : "Create Account"}
+            type="submit"
+            disabled={isPending}
+          />
         </form>
 
         <AuthFormFooter
