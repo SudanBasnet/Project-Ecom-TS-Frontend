@@ -1,27 +1,47 @@
 "use client";
 
 import Link from "next/link";
+import { clearAuthSession } from "@/lib/auth-session";
 import { usePathname, useRouter } from "next/navigation";
 import {
   FiBell,
   FiChevronDown,
   FiExternalLink,
   FiGrid,
+  FiLoader,
   FiLogOut,
   FiMenu,
   FiSearch,
   FiUser,
 } from "react-icons/fi";
+import { useState } from "react";
 import Dropdown from "../../ui/dropdown";
 import { getAdminPageTitle } from "./admin.config";
 
 const menuLinkClass =
   "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50 hover:text-indigo-700";
 
-const AdminHeader = ({ onMenuClick }: { onMenuClick: () => void }) => {
+const AdminHeader = ({
+  onMenuClick,
+  role = "admin",
+}: {
+  onMenuClick: () => void;
+  role?: "admin" | "user";
+}) => {
   const pathname = usePathname();
   const router = useRouter();
-  const title = getAdminPageTitle(pathname);
+  const title = getAdminPageTitle(pathname, role);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  const handleLogout = () => {
+    setIsLoggingOut(true);
+
+    window.setTimeout(() => {
+      clearAuthSession();
+      router.replace("/auth/login");
+      router.refresh();
+    }, 3000);
+  };
 
   return (
     <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/90 backdrop-blur-xl">
@@ -37,7 +57,7 @@ const AdminHeader = ({ onMenuClick }: { onMenuClick: () => void }) => {
 
         <div className="min-w-0">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-indigo-600">
-            Admin workspace
+            {role === "admin" ? "Admin workspace" : "Account workspace"}
           </p>
           <h1 className="truncate text-xl font-bold tracking-tight text-slate-900">
             {title}
@@ -73,10 +93,10 @@ const AdminHeader = ({ onMenuClick }: { onMenuClick: () => void }) => {
                 </span>
                 <span className="hidden leading-tight sm:block">
                   <span className="block text-sm font-bold text-slate-800">
-                    Store admin
+                    {role === "admin" ? "Store admin" : "Logged in as user"}
                   </span>
                   <span className="block text-[11px] text-slate-500">
-                    Administrator
+                    {role === "admin" ? "Administrator" : "Customer"}
                   </span>
                 </span>
                 <FiChevronDown
@@ -99,10 +119,10 @@ const AdminHeader = ({ onMenuClick }: { onMenuClick: () => void }) => {
                     </span>
                     <div className="min-w-0">
                       <p className="truncate text-sm font-bold text-slate-900">
-                        Store admin
+                        {role === "admin" ? "Store admin" : "Store user"}
                       </p>
                       <p className="truncate text-xs text-slate-500">
-                        admin@broadway.store
+                        {role === "admin" ? "Administrator" : "Customer account"}
                       </p>
                     </div>
                   </div>
@@ -110,7 +130,7 @@ const AdminHeader = ({ onMenuClick }: { onMenuClick: () => void }) => {
 
                 <div className="p-2">
                   <Link
-                    href="/admin"
+                    href={role === "admin" ? "/admin" : "/dashboard"}
                     role="menuitem"
                     onClick={close}
                     className={menuLinkClass}
@@ -134,14 +154,18 @@ const AdminHeader = ({ onMenuClick }: { onMenuClick: () => void }) => {
                   <button
                     type="button"
                     role="menuitem"
+                    disabled={isLoggingOut}
                     onClick={() => {
-                      close();
-                      router.replace("/auth/login");
+                      handleLogout();
                     }}
-                    className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-rose-600 transition hover:bg-rose-50"
+                    className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-rose-600 transition hover:bg-rose-50 disabled:cursor-not-allowed disabled:opacity-70"
                   >
-                    <FiLogOut className="size-4" />
-                    Sign out
+                    {isLoggingOut ? (
+                      <FiLoader className="size-4 animate-spin" />
+                    ) : (
+                      <FiLogOut className="size-4" />
+                    )}
+                    {isLoggingOut ? "Signing out..." : "Sign out"}
                   </button>
                 </div>
               </div>

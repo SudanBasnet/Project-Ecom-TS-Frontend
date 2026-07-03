@@ -53,9 +53,19 @@ export const getBrands = async () => {
   return unwrapData<Brand[]>(response);
 };
 
+export const getBrand = async (id: string) => {
+  const response = await http.get(`/brands/${id}`);
+  return unwrapData<Brand>(response);
+};
+
 export const getCategories = async () => {
   const response = await http.get("/categories");
   return unwrapData<Category[]>(response);
+};
+
+export const getCategory = async (id: string) => {
+  const response = await http.get(`/categories/${id}`);
+  return unwrapData<Category>(response);
 };
 
 export const getCategoryName = (category: Product["category"]) =>
@@ -65,4 +75,3 @@ export const getBrandName = (brand: Product["brand"]) =>
   typeof brand === "object" && brand ? brand.name : "No brand";
 
 export const getPrice = (product: Product) => Number(product.price) || 0;
-

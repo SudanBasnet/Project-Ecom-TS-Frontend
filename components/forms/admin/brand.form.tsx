@@ -1,6 +1,6 @@
 "use client";
 
-import { createBrand } from "@/api/admin.api";
+import { createBrand, updateBrand } from "@/api/admin.api";
 import AdminListCard from "@/components/admin/list-card";
 import Button from "@/components/common/ui/button";
 import Input from "@/components/common/ui/input";
@@ -15,14 +15,20 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
-const BrandForm = () => {
+type BrandFormProps = Readonly<{
+  brandId?: string;
+  initialValues?: TBrandFormValues;
+}>;
+
+const BrandForm = ({ brandId, initialValues }: BrandFormProps) => {
+  const isEditing = Boolean(brandId);
   const {
     register,
     handleSubmit,
     formState: { dirtyFields, errors },
   } = useForm<TBrandFormValues, unknown, TBrandInput>({
     mode: "onChange",
-    defaultValues: {
+    defaultValues: initialValues ?? {
       name: "",
       description: "",
     },
@@ -30,18 +36,21 @@ const BrandForm = () => {
   });
   const router = useRouter();
   const { mutate, isPending } = useMutation({
-    mutationFn: createBrand,
+    mutationFn: (data: TBrandInput) =>
+      brandId ? updateBrand(brandId, data) : createBrand(data),
   });
 
   const onSubmit = (data: TBrandInput) => {
     mutate(data, {
       onSuccess: () => {
-        toast.success("Brand created");
+        toast.success(isEditing ? "Brand updated" : "Brand created");
         router.push("/admin/brands");
         router.refresh();
       },
       onError: () => {
-        toast.error("Unable to create brand");
+        toast.error(
+          isEditing ? "Unable to update brand" : "Unable to create brand",
+        );
       },
     });
   };
@@ -49,9 +58,13 @@ const BrandForm = () => {
   return (
     <AdminListCard>
       <div className="border-b border-slate-100 pb-4">
-        <h2 className="text-lg font-bold text-slate-900">Brand details</h2>
+        <h2 className="text-lg font-bold text-slate-900">
+          {isEditing ? "Edit brand details" : "Brand details"}
+        </h2>
         <p className="mt-1 text-sm text-slate-500">
-          Create a new catalogue brand for your products.
+          {isEditing
+            ? "Update this catalogue brand for your products."
+            : "Create a new catalogue brand for your products."}
         </p>
       </div>
 
@@ -85,7 +98,13 @@ const BrandForm = () => {
 
         <div className="max-w-48">
           <Button
-            label={isPending ? "Saving..." : "Save brand"}
+            label={
+              isPending
+                ? "Saving..."
+                : isEditing
+                  ? "Update brand"
+                  : "Save brand"
+            }
             type="submit"
             disabled={isPending}
           />

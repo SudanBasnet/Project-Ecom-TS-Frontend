@@ -9,66 +9,66 @@ import {
   type SortingState,
   useReactTable,
 } from "@tanstack/react-table";
-import { useMemo, useState } from "react";
 import {
   FiChevronDown,
   FiChevronUp,
   FiEdit2,
-  FiExternalLink,
+  FiLayers,
   FiSearch,
 } from "react-icons/fi";
-import Link from "next/link";
+import { useMemo, useState } from "react";
 
-export type BrandTableRow = {
+export type CategoryTableRow = {
   id: string;
   name: string;
-  initials: string;
+  description: string;
   products: number;
-  colour: string;
-  website: string;
+  updated: string;
+  accent: string;
   status: "Active" | "Inactive";
 };
 
-type BrandTableProps = Readonly<{
-  brands: BrandTableRow[];
+type CategoryTableProps = Readonly<{
+  categories: CategoryTableRow[];
 }>;
 
-const statusStyles: Record<BrandTableRow["status"], string> = {
+const statusStyles: Record<CategoryTableRow["status"], string> = {
   Active: "bg-emerald-50 text-emerald-700 ring-emerald-600/10",
   Inactive: "bg-slate-100 text-slate-600 ring-slate-500/10",
 };
 
-const BrandTable = ({ brands }: BrandTableProps) => {
+const CategoryTable = ({ categories }: CategoryTableProps) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState("");
 
-  const columns = useMemo<ColumnDef<BrandTableRow>[]>(
+  const columns = useMemo<ColumnDef<CategoryTableRow>[]>(
     () => [
       {
         accessorKey: "name",
-        header: "Brand",
+        header: "Category",
         cell: ({ row }) => {
-          const brand = row.original;
+          const category = row.original;
 
           return (
             <div className="flex items-center gap-3">
               <span
-                className={`grid size-10 place-items-center rounded-xl text-xs font-black text-white ${brand.colour}`}
+                className={`grid size-10 shrink-0 place-items-center rounded-xl bg-gradient-to-br text-white ${category.accent}`}
               >
-                {brand.initials}
+                <FiLayers className="size-4" />
               </span>
-              <span className="font-bold text-slate-800">{brand.name}</span>
+              <span className="font-bold text-slate-800">
+                {category.name}
+              </span>
             </div>
           );
         },
       },
       {
-        accessorKey: "website",
-        header: "Website",
+        accessorKey: "description",
+        header: "Description",
         cell: ({ getValue }) => (
-          <span className="inline-flex items-center gap-1.5 text-slate-500">
+          <span className="line-clamp-2 max-w-md text-slate-500">
             {getValue<string>()}
-            <FiExternalLink className="size-3.5" />
           </span>
         ),
       },
@@ -82,10 +82,17 @@ const BrandTable = ({ brands }: BrandTableProps) => {
         ),
       },
       {
+        accessorKey: "updated",
+        header: "Updated",
+        cell: ({ getValue }) => (
+          <span className="text-slate-500">{getValue<string>()}</span>
+        ),
+      },
+      {
         accessorKey: "status",
         header: "Status",
         cell: ({ getValue }) => {
-          const status = getValue<BrandTableRow["status"]>();
+          const status = getValue<CategoryTableRow["status"]>();
 
           return (
             <span
@@ -102,13 +109,13 @@ const BrandTable = ({ brands }: BrandTableProps) => {
         enableSorting: false,
         cell: ({ row }) => (
           <div className="text-right">
-            <Link
-              href={`/admin/brands/edit/${row.original.id}`}
+            <button
+              type="button"
               aria-label={`Edit ${row.original.name}`}
               className="inline-grid size-9 place-items-center rounded-lg text-slate-400 transition hover:bg-indigo-50 hover:text-indigo-600"
             >
               <FiEdit2 className="size-4" />
-            </Link>
+            </button>
           </div>
         ),
       },
@@ -119,7 +126,7 @@ const BrandTable = ({ brands }: BrandTableProps) => {
   // TanStack Table intentionally returns handler functions from this hook.
   // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
-    data: brands,
+    data: categories,
     columns,
     state: {
       sorting,
@@ -136,20 +143,20 @@ const BrandTable = ({ brands }: BrandTableProps) => {
     <>
       <div className="border-b border-slate-100 px-5 py-4 sm:px-6">
         <label className="relative block max-w-sm">
-          <span className="sr-only">Search brands</span>
+          <span className="sr-only">Search categories</span>
           <FiSearch className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400" />
           <input
             type="search"
             value={globalFilter}
             onChange={(event) => setGlobalFilter(event.target.value)}
-            placeholder="Search brands"
+            placeholder="Search categories"
             className="h-10 w-full rounded-xl border border-slate-200 bg-slate-50 pl-9 pr-3 text-sm font-medium text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-indigo-300 focus:bg-white focus:ring-4 focus:ring-indigo-100"
           />
         </label>
       </div>
 
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[720px] text-left">
+        <table className="w-full min-w-[840px] text-left">
           <thead className="bg-slate-50 text-[10px] font-bold uppercase tracking-[0.12em] text-slate-400">
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
@@ -209,7 +216,7 @@ const BrandTable = ({ brands }: BrandTableProps) => {
                   colSpan={columns.length}
                   className="px-6 py-10 text-center text-sm font-medium text-slate-500"
                 >
-                  No brands match your search.
+                  No categories match your search.
                 </td>
               </tr>
             )}
@@ -220,4 +227,4 @@ const BrandTable = ({ brands }: BrandTableProps) => {
   );
 };
 
-export default BrandTable;
+export default CategoryTable;

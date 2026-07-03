@@ -11,6 +11,11 @@ export const createBrand = async (data: CreateBrandInput) => {
   return unwrapData<Brand>(response);
 };
 
+export const updateBrand = async (id: string, data: CreateBrandInput) => {
+  const response = await http.patch(`/brands/${id}`, data);
+  return unwrapData<Brand>(response);
+};
+
 export const createCategory = async (data: FormData) => {
   const response = await http.post("/categories", data);
   return unwrapData<Category>(response);
@@ -20,4 +25,3 @@ export const createProduct = async (data: FormData) => {
   const response = await http.post("/products", data);
   return unwrapData<Product>(response);
 };
-

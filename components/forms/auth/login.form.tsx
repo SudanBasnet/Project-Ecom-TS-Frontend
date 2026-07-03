@@ -13,6 +13,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { persistAuthSession } from "@/lib/auth-session";
 
 const getErrorMessage = (error: unknown) => {
   if (axios.isAxiosError(error)) {
@@ -65,8 +66,10 @@ const LoginForm = () => {
   const onSubmit = (data: TLoginInput) => {
     mutate(data, {
       onSuccess: (response) => {
+        const session = persistAuthSession(response);
         toast.success(getSuccessMessage(response));
-        router.replace("/admin");
+        router.replace(session.user.role === "admin" ? "/admin" : "/");
+        router.refresh();
       },
       onError: (error) => {
         toast.error(getErrorMessage(error));

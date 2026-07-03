@@ -1,7 +1,10 @@
 import { getCategories, getProducts } from "@/api/catalog.api";
+import CategoryTable, {
+  type CategoryTableRow,
+} from "@/components/admin/category-table";
 import PageTitle from "@/components/admin/page-title";
 import type { Metadata } from "next";
-import { FiEdit2, FiLayers, FiMoreHorizontal } from "react-icons/fi";
+import { FiLayers, FiMoreHorizontal } from "react-icons/fi";
 
 export const dynamic = "force-dynamic";
 
@@ -24,19 +27,21 @@ const CategoriesPage = async () => {
     getProducts().catch(() => []),
   ]);
 
-  const rows = categories.map((category, index) => ({
-    ...category,
+  const rows: CategoryTableRow[] = categories.map((category, index) => ({
+    id: category._id,
+    name: category.name,
+    description: category.description || "No description",
     products: products.filter((product) => {
       const productCategory = product.category;
       return typeof productCategory === "object"
         ? productCategory?._id === category._id
         : productCategory === category._id;
     }).length,
-    status: "Active",
     updated: category.updatedAt
       ? new Date(category.updatedAt).toLocaleDateString()
       : "Recently",
     accent: categoryAccents[index % categoryAccents.length],
+    status: "Active",
   }));
 
   return (
@@ -100,47 +105,7 @@ const CategoriesPage = async () => {
           </button>
         </div>
 
-        <div className="grid gap-4 p-4 sm:grid-cols-2 xl:grid-cols-3 sm:p-6">
-          {rows.map((category) => (
-            <article
-              key={category._id}
-              className="group rounded-2xl border border-slate-200 p-4 transition hover:-translate-y-0.5 hover:border-indigo-200 hover:shadow-lg hover:shadow-indigo-100/60"
-            >
-              <div className="flex items-start gap-4">
-                <div
-                  className={`grid size-14 shrink-0 place-items-center rounded-2xl bg-gradient-to-br ${category.accent} text-white shadow-sm`}
-                >
-                  <FiLayers className="size-6" />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center justify-between gap-2">
-                    <h3 className="truncate font-bold text-slate-900">
-                      {category.name}
-                    </h3>
-                    <button
-                      type="button"
-                      aria-label={`Edit ${category.name}`}
-                      className="grid size-8 place-items-center rounded-lg text-slate-400 opacity-0 transition hover:bg-indigo-50 hover:text-indigo-600 group-hover:opacity-100"
-                    >
-                      <FiEdit2 className="size-4" />
-                    </button>
-                  </div>
-                  <p className="mt-1 text-xs text-slate-500">
-                    {category.products} product
-                  </p>
-                  <div className="mt-4 flex items-center justify-between">
-                    <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-[10px] font-bold text-emerald-700">
-                      {category.status}
-                    </span>
-                    <span className="text-[10px] font-medium text-slate-400">
-                      Updated {category.updated}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
+        <CategoryTable categories={rows} />
       </section>
     </div>
   );

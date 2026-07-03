@@ -3,15 +3,21 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FiX } from "react-icons/fi";
-import { adminNavItems, isAdminRouteActive } from "../admin.config";
+import { getAdminNavItems, isAdminRouteActive } from "../admin.config";
 
 type SidebarLinksProps = {
   isOpen: boolean;
   onClose: () => void;
+  role?: "admin" | "user";
 };
 
-const SidebarLinks = ({ isOpen, onClose }: SidebarLinksProps) => {
+const SidebarLinks = ({
+  isOpen,
+  onClose,
+  role = "admin",
+}: SidebarLinksProps) => {
   const pathname = usePathname();
+  const navItems = getAdminNavItems(role);
 
   return (
     <aside
@@ -21,7 +27,7 @@ const SidebarLinks = ({ isOpen, onClose }: SidebarLinksProps) => {
     >
       <div className="flex h-20 items-center border-b border-white/10 px-6">
         <Link
-          href="/admin"
+          href={role === "admin" ? "/admin" : "/dashboard"}
           onClick={onClose}
           className="flex items-center gap-3"
         >
@@ -33,7 +39,7 @@ const SidebarLinks = ({ isOpen, onClose }: SidebarLinksProps) => {
               Broadway
             </span>
             <span className="mt-1 block font-mono text-[9px] font-medium uppercase leading-none tracking-[0.16em] text-indigo-300">
-              Store admin
+              {role === "admin" ? "Store admin" : "Member dashboard"}
             </span>
           </span>
         </Link>
@@ -50,11 +56,11 @@ const SidebarLinks = ({ isOpen, onClose }: SidebarLinksProps) => {
 
       <div className="flex-1 overflow-y-auto px-4 py-6">
         <p className="px-3 font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-indigo-300/70">
-          Store management
+          {role === "admin" ? "Store management" : "Account"}
         </p>
 
         <nav className="mt-3 space-y-1.5" aria-label="Admin navigation">
-          {adminNavItems.map((item) => {
+          {navItems.map((item) => {
             const active = isAdminRouteActive(pathname, item.href);
 
             return (

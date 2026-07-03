@@ -13,12 +13,12 @@ export const dynamic = "force-dynamic";
 const benefits = [
   {
     title: "Fast delivery",
-    description: "Dummy delivery copy ready to replace with your real policy.",
+    description: "Delivery details will reflect the store policy configured for your backend.",
     icon: FaShippingFast,
   },
   {
     title: "Secure checkout",
-    description: "A placeholder for payment and buyer-protection details.",
+    description: "Checkout is prepared for your connected payment and account flow.",
     icon: FaShieldAlt,
   },
 ];

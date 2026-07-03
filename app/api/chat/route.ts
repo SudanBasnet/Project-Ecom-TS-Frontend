@@ -1,4 +1,4 @@
-import { products } from "@/data/products";
+import { getCategoryName, getPrice, getProducts } from "@/api/catalog.api";
 import OpenAI from "openai";
 
 type ChatMessage = {
@@ -9,14 +9,16 @@ type ChatMessage = {
 const MAX_MESSAGES = 10;
 const MAX_MESSAGE_LENGTH = 1_000;
 
-const catalogue = products
-  .map(
-    (product) =>
-      `- ${product.name} (${product.category}) — $${product.price}: ${product.description} Product URL: /products/${product.id}`,
-  )
-  .join("\n");
+const getInstructions = async () => {
+  const products = await getProducts().catch(() => []);
+  const catalogue = products
+    .map(
+      (product) =>
+        `- ${product.name} (${getCategoryName(product.category)}) — $${getPrice(product).toFixed(2)}: ${product.description ?? "No description"} Product URL: /products/${product._id}`,
+    )
+    .join("\n");
 
-const instructions = `You are Broadway Store's friendly shopping assistant.
+  return `You are Broadway Store's friendly shopping assistant.
 
 Help customers choose products, compare options, and understand the catalogue.
 Only claim product names, prices, categories, descriptions, and URLs found in the catalogue below.
@@ -25,7 +27,8 @@ If the catalogue does not contain a suitable product, say so clearly instead of 
 Keep answers concise, warm, and easy to scan. Do not claim to place orders, process payments, check live stock, or access customer accounts.
 
 Current catalogue:
-${catalogue}`;
+${catalogue || "No products are currently available."}`;
+};
 
 function isChatMessage(value: unknown): value is ChatMessage {
   if (!value || typeof value !== "object") {
@@ -76,7 +79,7 @@ export async function POST(request: Request) {
     const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
     const response = await openai.responses.create({
       model: process.env.OPENAI_MODEL ?? "gpt-5.4-mini",
-      instructions,
+      instructions: await getInstructions(),
       input: rawMessages.map((message) => ({
         role: message.role,
         content: message.content.trim(),

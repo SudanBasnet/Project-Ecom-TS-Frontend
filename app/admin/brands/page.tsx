@@ -27,6 +27,7 @@ const BrandsPage = async () => {
   ]);
 
   const rows: BrandTableRow[] = brands.map((brand, index) => ({
+    id: brand._id,
     name: brand.name,
     initials: brand.name
       .split(" ")

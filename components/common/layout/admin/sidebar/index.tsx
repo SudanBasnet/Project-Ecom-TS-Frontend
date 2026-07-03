@@ -5,9 +5,10 @@ import SidebarLinks from "./sidebar-content";
 type SidebarProps = {
   isOpen: boolean;
   onClose: () => void;
+  role?: "admin" | "user";
 };
 
-const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
+const Sidebar = ({ isOpen, onClose, role = "admin" }: SidebarProps) => {
   return (
     <>
       <button
@@ -19,7 +20,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
         }`}
       />
 
-      <SidebarLinks isOpen={isOpen} onClose={onClose} />
+      <SidebarLinks isOpen={isOpen} onClose={onClose} role={role} />
     </>
   );
 };
