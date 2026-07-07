@@ -3,6 +3,7 @@
 import { createCategory, createProduct } from "@/api/admin.api";
 import AdminListCard from "./list-card";
 import ImageInput from "@/components/common/ui/image-input";
+import axios from "axios";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { toast } from "react-toastify";
@@ -22,6 +23,25 @@ type Field = {
 type CreateEntityFormProps = {
   entityName: string;
   fields: Field[];
+};
+
+const getErrorMessage = (error: unknown, entityName: string) => {
+  if (axios.isAxiosError(error)) {
+    const data = error.response?.data;
+
+    if (
+      data &&
+      typeof data === "object" &&
+      "message" in data &&
+      typeof data.message === "string"
+    ) {
+      return data.message;
+    }
+  }
+
+  return error instanceof Error
+    ? error.message
+    : `Unable to save ${entityName}`;
 };
 
 const CreateEntityForm = ({
@@ -54,9 +74,7 @@ const CreateEntityForm = ({
         return;
       }
     } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : `Unable to save ${entityName}`,
-      );
+      toast.error(getErrorMessage(error, entityName));
     } finally {
       setIsSubmitting(false);
     }

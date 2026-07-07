@@ -1,6 +1,6 @@
 export default function ProductLoading() {
   return (
-    <main className="flex-1 animate-pulse px-6 py-14">
+    <main className="page-loading-skeleton flex-1 px-6 py-14">
       <div className="mx-auto grid max-w-6xl overflow-hidden rounded-[2rem] bg-white lg:grid-cols-2">
         <div className="min-h-96 bg-[#c7d2fe]" />
         <div className="space-y-5 p-12">

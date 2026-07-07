@@ -108,7 +108,7 @@ const ImageInput = ({
         </span>
         <span className="mt-1 text-xs text-slate-500">
           {multiple ? "Multiple files allowed" : "Only one file allowed"} - PNG,
-          JPG, WEBP or SVG
+          JPG or WEBP
         </span>
         <input
           {...register}

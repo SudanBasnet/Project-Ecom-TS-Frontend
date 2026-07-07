@@ -1,6 +1,7 @@
 import StoreChatbot from "@/components/common/chat/store-chatbot";
 import Footer from "@/components/common/layout/footer/footer";
 import Navbar from "@/components/common/layout/nav/navbar";
+import PageTransition from "@/components/common/ui/page-transition";
 
 const StoreLayout = ({
   children,
@@ -8,7 +9,9 @@ const StoreLayout = ({
   return (
     <div className="flex min-h-screen flex-col bg-slate-50">
       <Navbar />
-      <div className="flex flex-1 flex-col overflow-x-hidden">{children}</div>
+      <PageTransition className="flex flex-1 flex-col overflow-x-hidden">
+        {children}
+      </PageTransition>
       <Footer />
       <StoreChatbot />
     </div>

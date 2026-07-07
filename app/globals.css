@@ -25,3 +25,41 @@ body {
   color: var(--foreground);
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
 }
+
+.page-loading-skeleton {
+  opacity: 0;
+  animation: page-loading-reveal 150ms ease-in-out 200ms forwards;
+}
+
+.page-loading-skeleton * {
+  animation: page-loading-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes page-loading-reveal {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes page-loading-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.55;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .page-loading-skeleton,
+  .page-loading-skeleton * {
+    animation: none;
+    opacity: 1;
+  }
+}

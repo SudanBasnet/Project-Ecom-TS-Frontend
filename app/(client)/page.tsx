@@ -3,10 +3,11 @@ import {
   getPrice,
   getProducts,
 } from "@/api/catalog.api";
+import CategorySection from "@/components/Landing/category-section";
+import Hero from "@/components/Landing/hero";
 import ProductMedia from "@/components/common/ui/product-media";
-import ProductVisual from "@/components/common/ui/product-visual";
 import Link from "next/link";
-import { FaArrowRight, FaShieldAlt, FaShippingFast } from "react-icons/fa";
+import { FaShieldAlt, FaShippingFast } from "react-icons/fa";
 
 export const dynamic = "force-dynamic";
 
@@ -29,41 +30,8 @@ const HomePage = async () => {
 
   return (
     <main className="flex-1">
-      <section className="bg-[#eef2ff] px-6 py-16 text-[#1e1b4b] sm:py-24">
-        <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-2">
-          <div>
-            <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#4f46e5]">
-              New season collection
-            </p>
-            <h1 className="mt-4 text-4xl font-black leading-tight sm:text-6xl">
-              Useful products, picked for everyday life.
-            </h1>
-            <p className="mt-6 max-w-xl text-lg leading-8 text-[#64748b]">
-              Browse the latest products from your connected backend catalogue.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link
-                href="/products"
-                className="btn border-0 bg-[#4f46e5] text-white hover:bg-[#4338ca]"
-              >
-                Shop products <FaArrowRight />
-              </Link>
-              <Link
-                href="/about"
-                className="btn border-[#c7d2fe] bg-white text-[#4338ca] hover:bg-[#e0e7ff]"
-              >
-                About the store
-              </Link>
-            </div>
-          </div>
-
-          <ProductVisual
-            name="Featured collection"
-            accent="from-indigo-600 via-violet-500 to-fuchsia-400"
-            className="aspect-square rounded-[2.5rem] shadow-2xl shadow-indigo-300/40"
-          />
-        </div>
-      </section>
+      <Hero />
+      <CategorySection />
 
       <section className="px-6 py-16">
         <div className="mx-auto max-w-6xl">
