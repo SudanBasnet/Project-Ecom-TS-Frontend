@@ -10,13 +10,18 @@ interface IProps {
 }
 
 const getCategoryImage = (category: TCategory) => {
-  const image = Array.isArray(category.image) ? category.image[0] : category.image;
+  const image = Array.isArray(category.image)
+    ? category.image[0]
+    : category.image;
   return image?.path;
 };
 
 const CategoryCard = ({ category }: IProps) => {
   const imagePath = getCategoryImage(category);
-  const imageSrc = imagePath?.startsWith("/") ? imagePath : null;
+  const imageSrc =
+    imagePath?.startsWith("/") || imagePath?.startsWith("https://")
+      ? imagePath
+      : null;
 
   return (
     <Tilt
@@ -44,11 +49,11 @@ const CategoryCard = ({ category }: IProps) => {
           )}
         </div>
 
-        <div className="min-w-0">
+        <div className="flex min-w-0 flex-col justify-center">
           <p className="truncate text-base font-semibold text-gray-700">
             {category.name}
           </p>
-          <p className="mt-1 line-clamp-2 text-sm leading-5 text-gray-400">
+          <p className="mt-1 line-clamp-2 text-sm leading-[18px] text-gray-400">
             {category.description ?? "Explore products in this category."}
           </p>
         </div>

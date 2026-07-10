@@ -4,9 +4,11 @@ import {
   getProducts,
 } from "@/api/catalog.api";
 import CategorySection from "@/components/Landing/category-section";
+import CategorySectionSkeleton from "@/components/Landing/category-section/skeleton";
 import Hero from "@/components/Landing/hero";
 import ProductMedia from "@/components/common/ui/product-media";
 import Link from "next/link";
+import { Suspense } from "react";
 import { FaShieldAlt, FaShippingFast } from "react-icons/fa";
 
 export const dynamic = "force-dynamic";
@@ -31,7 +33,9 @@ const HomePage = async () => {
   return (
     <main className="flex-1">
       <Hero />
-      <CategorySection />
+      <Suspense fallback={<CategorySectionSkeleton />}>
+        <CategorySection />
+      </Suspense>
 
       <section className="px-6 py-16">
         <div className="mx-auto max-w-6xl">

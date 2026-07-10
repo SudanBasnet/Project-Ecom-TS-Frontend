@@ -1,4 +1,4 @@
-type IImage = {
+export type IImage = {
   _id?: string;
   path: string;
   public_id: string;

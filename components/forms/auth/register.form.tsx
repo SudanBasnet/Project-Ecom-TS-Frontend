@@ -12,6 +12,24 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { TRegisterInput } from "@/types/auth.types";
+import axios from "axios";
+
+const getErrorMessage = (error: unknown) => {
+  if (axios.isAxiosError(error)) {
+    const data = error.response?.data;
+
+    if (
+      data &&
+      typeof data === "object" &&
+      "message" in data &&
+      typeof data.message === "string"
+    ) {
+      return data.message;
+    }
+  }
+
+  return "Unable to create account. Please try again.";
+};
 
 interface RegisterFormData {
   name: string;
@@ -54,8 +72,8 @@ export const RegisterForm = () => {
           toast.success("Account created");
           router.push("/auth/login");
         },
-        onError: () => {
-          toast.error("Unable to create account");
+        onError: (error) => {
+          toast.error(getErrorMessage(error));
         },
       },
     );

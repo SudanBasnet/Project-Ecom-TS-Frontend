@@ -1,11 +1,11 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-const AUTH_COOKIE = "bs_auth";
+const AUTH_COOKIE = "access_token";
 const ROLE_COOKIE = "bs_role";
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const isLoggedIn = request.cookies.get(AUTH_COOKIE)?.value === "1";
+  const isLoggedIn = Boolean(request.cookies.get(AUTH_COOKIE)?.value);
   const role = request.cookies.get(ROLE_COOKIE)?.value;
 
   if (

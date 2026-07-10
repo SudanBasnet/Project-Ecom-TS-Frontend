@@ -11,7 +11,7 @@ import { TLoginInput } from "@/types/auth.types";
 import { login } from "@/api/auth.api";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { persistAuthSession } from "@/lib/auth-session";
 
@@ -59,6 +59,7 @@ const LoginForm = () => {
     resolver: yupResolver(loginSchema),
   });
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { mutate, isPending } = useMutation({
     mutationFn: login,
   });
@@ -67,6 +68,7 @@ const LoginForm = () => {
     mutate(data, {
       onSuccess: (response) => {
         const session = persistAuthSession(response);
+        void queryClient.invalidateQueries({ queryKey: ["me"] });
         toast.success(getSuccessMessage(response));
         router.replace(session.user.role === "admin" ? "/admin" : "/");
         router.refresh();

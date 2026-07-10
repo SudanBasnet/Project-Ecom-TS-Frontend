@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FaBars, FaHeart, FaShoppingCart } from "react-icons/fa";
 import {
   FiChevronDown,
@@ -8,11 +8,8 @@ import {
   FiLogOut,
   FiUser,
 } from "react-icons/fi";
-import {
-  clearAuthSession,
-  getStoredAuthSession,
-  type AuthSession,
-} from "@/lib/auth-session";
+import type { AuthSession } from "@/lib/auth-session";
+import { useAuth } from "@/hooks/auth.hook";
 import { isActiveRoute } from "./nav.config";
 import NavLinks from "./nav-links";
 import Dropdown from "../../ui/dropdown";
@@ -55,32 +52,33 @@ const IconLink = ({
 
 const NavActions = ({ pathname }: NavActionsProps) => {
   const router = useRouter();
-  const [session, setSession] = useState<AuthSession | null>(null);
+  const { user, logout: logoutAccount } = useAuth();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
-
-  useEffect(() => {
-    const refreshSession = () => setSession(getStoredAuthSession());
-
-    refreshSession();
-    window.addEventListener("storage", refreshSession);
-    window.addEventListener("auth-session-change", refreshSession);
-
-    return () => {
-      window.removeEventListener("storage", refreshSession);
-      window.removeEventListener("auth-session-change", refreshSession);
-    };
-  }, []);
+  const session: AuthSession | null = user
+    ? {
+        user: {
+          name: user.full_name,
+          email: user.email,
+          role:
+            user.role === "ADMIN" || user.role === "SUPER_ADMIN"
+              ? "admin"
+              : "user",
+        },
+      }
+    : null;
 
   const dashboardHref = session?.user.role === "admin" ? "/admin" : "/dashboard";
 
-  const logout = () => {
+  const logout = async () => {
     setIsLoggingOut(true);
 
-    window.setTimeout(() => {
-      clearAuthSession();
+    try {
+      await logoutAccount();
       router.replace("/auth/login");
       router.refresh();
-    }, 3000);
+    } finally {
+      setIsLoggingOut(false);
+    }
   };
 
   return (
