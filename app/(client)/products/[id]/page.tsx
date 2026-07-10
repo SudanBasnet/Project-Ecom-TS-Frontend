@@ -1,8 +1,9 @@
 import { getCategoryName, getPrice, getProduct } from "@/api/catalog.api";
 import ProductMedia from "@/components/common/ui/product-media";
+import AddToCartButton from "@/components/cart/add-to-cart-button";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { FaHeart, FaShoppingCart } from "react-icons/fa";
+import { FaHeart } from "react-icons/fa";
 
 type ProductPageProps = {
   params: Promise<{ id: string }>;
@@ -51,12 +52,10 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                 : "Currently out of stock."}
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <button
-                type="button"
-                className="btn flex-1 border-0 bg-[#4f46e5] text-white hover:bg-[#4338ca]"
-              >
-                <FaShoppingCart /> Add to cart
-              </button>
+              <AddToCartButton
+                productId={product._id}
+                disabled={product.stock < 1}
+              />
               <button
                 type="button"
                 className="btn border-[#c7d2fe] bg-white text-[#4338ca] hover:bg-[#eef2ff]"

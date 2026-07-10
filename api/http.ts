@@ -1,7 +1,6 @@
 import axios from "axios";
 
-export const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8080/api/v1";
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export type ApiEnvelope<T> = {
   message: string;
@@ -26,4 +25,3 @@ export const http = axios.create({
 
 export const unwrapData = <T>(response: { data: ApiEnvelope<T> }) =>
   response.data.data.data;
-

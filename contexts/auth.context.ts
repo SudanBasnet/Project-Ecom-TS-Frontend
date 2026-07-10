@@ -1,13 +1,12 @@
 import type { IImage } from "@/types/category.types";
+import type { Role } from "@/types/enum.types";
 import { createContext } from "react";
-
-export type UserRole = "ADMIN" | "USER" | "SUPER_ADMIN";
 
 export interface IUser {
   _id: string;
   full_name: string;
   email: string;
-  role: UserRole;
+  role: Role;
   profile_image?: IImage;
   createdAt: string;
   updatedAt: string;

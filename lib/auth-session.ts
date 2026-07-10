@@ -24,7 +24,8 @@ const firstString = (...values: unknown[]) =>
   );
 
 const normalizeRole = (value: unknown): UserRole =>
-  typeof value === "string" && value.toLowerCase() === "admin"
+  typeof value === "string" &&
+  ["admin", "super_admin"].includes(value.toLowerCase())
     ? "admin"
     : "user";
 
