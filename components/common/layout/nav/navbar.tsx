@@ -9,7 +9,7 @@ const Navbar = () => {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 text-[#1e1b4b] shadow-sm backdrop-blur">
+    <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 text-[#1e1b4b] shadow-sm backdrop-blur transition-colors dark:border-slate-800 dark:bg-slate-950/90 dark:text-white">
       <div className="mx-auto flex h-18 max-w-7xl items-center gap-4 px-4 sm:px-6 lg:px-8">
         <NavBrand />
         <NavLinks pathname={pathname} />

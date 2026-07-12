@@ -5,6 +5,7 @@ import ReactQueryProvider from "@/providers/react-query-provider";
 import AuthProvider from "@/providers/auth.provider";
 import "./globals.css";
 import "react-toastify/dist/ReactToastify.css";
+import ThemeProvider from "@/providers/theme.provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,12 +33,22 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} min-h-screen antialiased tracking-wider`}
     >
-      <body className="min-h-screen">
-        <ReactQueryProvider>
-          <AuthProvider>{children}</AuthProvider>
-        </ReactQueryProvider>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('broadway-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');var d=document.documentElement;d.classList.toggle('dark',t==='dark');d.dataset.theme=t;d.style.colorScheme=t}catch(e){}})();`,
+          }}
+        />
+      </head>
+      <body className="min-h-screen transition-colors duration-300">
+        <ThemeProvider>
+          <ReactQueryProvider>
+            <AuthProvider>{children}</AuthProvider>
+          </ReactQueryProvider>
+        </ThemeProvider>
         <ToastProvider />
       </body>
     </html>

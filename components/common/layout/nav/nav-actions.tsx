@@ -14,6 +14,7 @@ import { isActiveRoute } from "./nav.config";
 import NavLinks from "./nav-links";
 import Dropdown from "../../ui/dropdown";
 import { useRouter } from "next/navigation";
+import ThemeToggle from "../../ui/theme-toggle";
 
 type NavActionsProps = {
   pathname: string;
@@ -70,10 +71,15 @@ const NavActions = ({ pathname }: NavActionsProps) => {
   const dashboardHref = session?.user.role === "admin" ? "/admin" : "/dashboard";
 
   const logout = async () => {
+    if (isLoggingOut) return;
+
     setIsLoggingOut(true);
 
     try {
-      await logoutAccount();
+      await Promise.all([
+        logoutAccount(),
+        new Promise((resolve) => window.setTimeout(resolve, 500)),
+      ]);
       router.replace("/auth/login");
       router.refresh();
     } finally {
@@ -83,6 +89,7 @@ const NavActions = ({ pathname }: NavActionsProps) => {
 
   return (
     <div className="ml-auto flex items-center gap-1.5 lg:ml-3">
+      <ThemeToggle />
       <IconLink
         href="/wishlist"
         label="Wishlist"

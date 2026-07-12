@@ -130,6 +130,7 @@ const LoginForm = () => {
             label={isPending ? "Signing In..." : "Sign In"}
             type="submit"
             disabled={isPending}
+            isLoading={isPending}
           />
         </form>
 

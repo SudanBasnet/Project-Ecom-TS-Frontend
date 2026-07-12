@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { clearAuthSession } from "@/lib/auth-session";
 import { usePathname, useRouter } from "next/navigation";
 import {
   FiBell,
@@ -17,6 +16,7 @@ import {
 import { useState } from "react";
 import Dropdown from "../../ui/dropdown";
 import { getAdminPageTitle } from "./admin.config";
+import { useAuth } from "@/hooks/auth.hook";
 
 const menuLinkClass =
   "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50 hover:text-indigo-700";
@@ -32,15 +32,23 @@ const AdminHeader = ({
   const router = useRouter();
   const title = getAdminPageTitle(pathname, role);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const { logout } = useAuth();
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    if (isLoggingOut) return;
+
     setIsLoggingOut(true);
 
-    window.setTimeout(() => {
-      clearAuthSession();
+    try {
+      await Promise.all([
+        logout(),
+        new Promise((resolve) => window.setTimeout(resolve, 500)),
+      ]);
       router.replace("/auth/login");
       router.refresh();
-    }, 3000);
+    } finally {
+      setIsLoggingOut(false);
+    }
   };
 
   return (
@@ -156,7 +164,7 @@ const AdminHeader = ({
                     role="menuitem"
                     disabled={isLoggingOut}
                     onClick={() => {
-                      handleLogout();
+                      void handleLogout();
                     }}
                     className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-rose-600 transition hover:bg-rose-50 disabled:cursor-not-allowed disabled:opacity-70"
                   >

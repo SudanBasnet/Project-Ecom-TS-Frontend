@@ -11,7 +11,7 @@ const footerLinks = [
 
 const Footer = () => {
   return (
-    <footer className="border-t border-slate-200 bg-white px-6 py-10 text-[#64748b]">
+    <footer className="border-t border-slate-200 bg-white px-6 py-10 text-[#64748b] transition-colors dark:border-slate-800 dark:bg-slate-950 dark:text-slate-400">
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-7 text-center md:flex-row md:text-left">
         <div>
           <Link

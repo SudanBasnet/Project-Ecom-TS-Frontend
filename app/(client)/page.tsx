@@ -1,13 +1,11 @@
 import {
-  getCategoryName,
-  getPrice,
+  getArticles,
   getProducts,
 } from "@/api/catalog.api";
 import CategorySection from "@/components/Landing/category-section";
 import CategorySectionSkeleton from "@/components/Landing/category-section/skeleton";
 import Hero from "@/components/Landing/hero";
-import ProductMedia from "@/components/common/ui/product-media";
-import Link from "next/link";
+import StorefrontShowcase from "@/components/Landing/storefront-showcase";
 import { Suspense } from "react";
 import { FaShieldAlt, FaShippingFast } from "react-icons/fa";
 
@@ -28,7 +26,7 @@ const benefits = [
 
 const HomePage = async () => {
   const products = await getProducts().catch(() => []);
-  const featuredProducts = products.slice(0, 3);
+  const articles = await getArticles().catch(() => []);
 
   return (
     <main className="flex-1">
@@ -37,72 +35,24 @@ const HomePage = async () => {
         <CategorySection />
       </Suspense>
 
-      <section className="px-6 py-16">
+      <StorefrontShowcase products={products} articles={articles} />
+
+      <section className="bg-white px-6 py-16 dark:bg-slate-950">
         <div className="mx-auto max-w-6xl">
-          <div className="flex flex-wrap items-end justify-between gap-4">
-            <div>
-              <p className="text-sm font-bold uppercase tracking-[0.16em] text-[#4f46e5]">
-                Featured products
-              </p>
-              <h2 className="mt-2 text-3xl font-bold text-[#1e1b4b]">
-                Start with these favourites
-              </h2>
-            </div>
-            <Link
-              href="/products"
-              className="font-semibold text-[#4338ca] hover:underline"
-            >
-              View all products
-            </Link>
-          </div>
-
-          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {featuredProducts.map((product) => (
-              <Link
-                key={product._id}
-                href={`/products/${product._id}`}
-                className="group overflow-hidden rounded-3xl border border-[#e0e7ff] bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
-              >
-                <ProductMedia
-                  name={product.name}
-                  imageUrl={product.cover_image?.path}
-                />
-                <div className="p-5">
-                  <p className="text-sm font-semibold text-[#6366f1]">
-                    {getCategoryName(product.category)}
-                  </p>
-                  <div className="mt-1 flex items-center justify-between gap-4">
-                    <h3 className="text-lg font-bold text-[#1e1b4b]">
-                      {product.name}
-                    </h3>
-                    <span className="font-bold text-[#4338ca]">
-                      ${getPrice(product).toFixed(2)}
-                    </span>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-          {featuredProducts.length === 0 && (
-            <p className="mt-8 rounded-2xl border border-dashed border-slate-300 p-8 text-center text-sm font-semibold text-slate-500">
-              Add products in the admin area to feature them here.
-            </p>
-          )}
-
-          <div className="mt-12 grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-4 sm:grid-cols-2">
             {benefits.map((benefit) => (
               <article
                 key={benefit.title}
-                className="flex gap-4 rounded-3xl bg-[#eef2ff] p-6"
+                className="flex gap-4 rounded-3xl bg-[#eef2ff] p-6 dark:bg-slate-900"
               >
-                <div className="grid size-12 shrink-0 place-items-center rounded-2xl bg-white text-[#4f46e5]">
+                <div className="grid size-12 shrink-0 place-items-center rounded-2xl bg-white text-[#4f46e5] dark:bg-slate-800 dark:text-indigo-300">
                   <benefit.icon className="size-5" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-[#1e1b4b]">
+                  <h3 className="font-bold text-[#1e1b4b] dark:text-white">
                     {benefit.title}
                   </h3>
-                  <p className="mt-1 text-sm leading-6 text-[#64748b]">
+                  <p className="mt-1 text-sm leading-6 text-[#64748b] dark:text-slate-400">
                     {benefit.description}
                   </p>
                 </div>

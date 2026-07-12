@@ -7,7 +7,7 @@ const StoreLayout = ({
   children,
 }: Readonly<{ children: React.ReactNode }>) => {
   return (
-    <div className="flex min-h-screen flex-col bg-slate-50">
+    <div className="flex min-h-screen flex-col bg-slate-50 transition-colors duration-300 dark:bg-slate-950">
       <Navbar />
       <PageTransition className="flex flex-1 flex-col overflow-x-hidden">
         {children}

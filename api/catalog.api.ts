@@ -38,6 +38,18 @@ export type Product = {
   updatedAt?: string;
 };
 
+export type Article = {
+  _id: string;
+  title: string;
+  excerpt: string;
+  category: string;
+  author: string;
+  read_time: string;
+  image: ImageAsset;
+  href: string;
+  featured?: boolean;
+};
+
 export const getProducts = async () => {
   const response = await http.get("/products", { params: { limit: 100 } });
   return unwrapData<Product[]>(response);
@@ -61,6 +73,11 @@ export const getBrand = async (id: string) => {
 export const getCategories = async () => {
   const response = await http.get("/categories");
   return unwrapData<Category[]>(response);
+};
+
+export const getArticles = async () => {
+  const response = await http.get("/articles");
+  return unwrapData<Article[]>(response);
 };
 
 export const getCategory = async (id: string) => {

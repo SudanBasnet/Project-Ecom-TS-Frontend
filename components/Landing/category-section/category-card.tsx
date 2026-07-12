@@ -34,7 +34,7 @@ const CategoryCard = ({ category }: IProps) => {
       tiltMaxAngleY={5}
       transitionSpeed={1200}
     >
-      <article className="flex h-24 gap-3 rounded-lg border border-indigo-100 bg-white p-2 shadow-sm transition-shadow hover:shadow-lg hover:shadow-indigo-100">
+      <article className="flex h-24 gap-3 rounded-lg border border-indigo-100 bg-white p-2 shadow-sm transition-colors hover:shadow-lg hover:shadow-indigo-100 dark:border-slate-700 dark:bg-slate-800 dark:hover:shadow-indigo-950">
         <div className="relative grid aspect-square h-full shrink-0 place-items-center overflow-hidden rounded-md bg-[#eef2ff] text-[#4f46e5]">
           {imageSrc ? (
             <Image
@@ -50,10 +50,10 @@ const CategoryCard = ({ category }: IProps) => {
         </div>
 
         <div className="flex min-w-0 flex-col justify-center">
-          <p className="truncate text-base font-semibold text-gray-700">
+          <p className="truncate text-base font-semibold text-gray-700 dark:text-white">
             {category.name}
           </p>
-          <p className="mt-1 line-clamp-2 text-sm leading-[18px] text-gray-400">
+          <p className="mt-1 line-clamp-2 text-sm leading-[18px] text-gray-400 dark:text-slate-400">
             {category.description ?? "Explore products in this category."}
           </p>
         </div>

@@ -1,14 +1,11 @@
 "use client";
 
-import { useGSAP } from "@gsap/react";
 import { animated, useSpring } from "@react-spring/web";
-import gsap from "gsap";
+import { motion, useReducedMotion } from "framer-motion";
 import Lottie from "lottie-react";
-import { animate } from "motion";
+import { animate as animateElement } from "motion";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
-
-gsap.registerPlugin(useGSAP);
 
 const sparkleAnimation = {
   v: "5.7.4",
@@ -63,58 +60,44 @@ const sparkleAnimation = {
 };
 
 const Hero = () => {
-  const scope = useRef<HTMLElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
+  const shouldReduceMotion = useReducedMotion();
   const [buttonSpring, buttonApi] = useSpring(() => ({
     scale: 1,
     y: 0,
     config: { tension: 260, friction: 18 },
   }));
 
-  useGSAP(
-    () => {
-      const prefersReducedMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)",
-      ).matches;
-
-      if (prefersReducedMotion) return;
-
-      gsap.from("[data-hero-item]", {
-        autoAlpha: 0,
-        y: 24,
-        duration: 0.7,
-        ease: "power2.out",
-        stagger: 0.08,
-      });
-    },
-    { scope },
-  );
-
   useEffect(() => {
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-
-    if (prefersReducedMotion) return;
+    if (shouldReduceMotion) return;
 
     if (!glowRef.current) return;
 
-    const controls = animate(
+    const controls = animateElement(
       glowRef.current,
       { opacity: [0.35, 0.65, 0.35], scale: [1, 1.08, 1] },
       { duration: 5, repeat: Infinity, ease: "easeInOut" },
     );
 
     return () => controls.stop();
-  }, []);
+  }, [shouldReduceMotion]);
+
+  const itemVariants = {
+    hidden: shouldReduceMotion
+      ? { opacity: 1 }
+      : { opacity: 0, y: 24, filter: "blur(6px)" },
+    visible: { opacity: 1, y: 0, filter: "blur(0px)" },
+  };
 
   return (
     <section
-      ref={scope}
       className="relative isolate mt-4 min-h-[78vh] overflow-hidden px-6 py-20 text-white sm:py-28"
     >
-      <video
+      <motion.video
         className="absolute inset-0 -z-20 size-full object-cover"
+        initial={shouldReduceMotion ? false : { opacity: 0, scale: 1.06 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
         autoPlay
         muted
         loop
@@ -123,54 +106,71 @@ const Hero = () => {
         aria-hidden="true"
       >
         <source src="/videos/hero.mp4" type="video/mp4" />
-      </video>
+      </motion.video>
       <div className="absolute inset-0 -z-10 bg-slate-950/65" />
       <div
         ref={glowRef}
         className="absolute right-[-8rem] top-10 -z-10 size-80 rounded-full bg-indigo-400/40 blur-3xl"
       />
 
-      <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-[1.15fr_0.85fr]">
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        variants={{
+          hidden: {},
+          visible: {
+            transition: shouldReduceMotion
+              ? { staggerChildren: 0 }
+              : { delayChildren: 0.15, staggerChildren: 0.1 },
+          },
+        }}
+        className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-[1.15fr_0.85fr]"
+      >
         <div>
-          <p
-            data-hero-item
+          <motion.p
+            variants={itemVariants}
+            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
             className="text-sm font-bold uppercase tracking-[0.2em] text-indigo-200"
           >
             New season collection
-          </p>
-          <h1
-            data-hero-item
+          </motion.p>
+          <motion.h1
+            variants={itemVariants}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             className="mt-4 max-w-3xl text-4xl font-black leading-tight sm:text-6xl"
           >
             Come here for the best.
-          </h1>
-          <p
-            data-hero-item
+          </motion.h1>
+          <motion.p
+            variants={itemVariants}
+            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
             className="mt-6 max-w-xl text-lg leading-8 text-slate-200"
           >
             Browse useful products, featured categories, and new arrivals from
             your connected backend catalogue.
-          </p>
-          <animated.div
-            data-hero-item
-            className="mt-8 inline-flex"
-            style={buttonSpring}
-            onMouseEnter={() => buttonApi.start({ scale: 1.04, y: -2 })}
-            onMouseLeave={() => buttonApi.start({ scale: 1, y: 0 })}
-            onMouseDown={() => buttonApi.start({ scale: 0.98, y: 0 })}
-            onMouseUp={() => buttonApi.start({ scale: 1.04, y: -2 })}
-          >
-            <Link
-              href="/products"
-              className="inline-flex h-12 items-center justify-center rounded-xl bg-white px-6 text-sm font-bold text-indigo-700 shadow-xl shadow-black/20 transition hover:bg-indigo-50 focus:outline-none focus:ring-4 focus:ring-white/30"
+          </motion.p>
+          <motion.div variants={itemVariants} transition={{ duration: 0.5 }}>
+            <animated.div
+              className="mt-8 inline-flex"
+              style={buttonSpring}
+              onMouseEnter={() => buttonApi.start({ scale: 1.04, y: -2 })}
+              onMouseLeave={() => buttonApi.start({ scale: 1, y: 0 })}
+              onMouseDown={() => buttonApi.start({ scale: 0.98, y: 0 })}
+              onMouseUp={() => buttonApi.start({ scale: 1.04, y: -2 })}
             >
-              Shop Now
-            </Link>
-          </animated.div>
+              <Link
+                href="/products"
+                className="inline-flex h-12 items-center justify-center rounded-xl bg-white px-6 text-sm font-bold text-indigo-700 shadow-xl shadow-black/20 transition hover:bg-indigo-50 focus:outline-none focus:ring-4 focus:ring-white/30"
+              >
+                Shop Now
+              </Link>
+            </animated.div>
+          </motion.div>
         </div>
 
-        <div
-          data-hero-item
+        <motion.div
+          variants={itemVariants}
+          transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
           className="hidden justify-self-end rounded-[2rem] border border-white/15 bg-white/10 p-6 shadow-2xl shadow-black/20 backdrop-blur-md lg:block"
         >
           <Lottie
@@ -182,8 +182,8 @@ const Hero = () => {
           <p className="mt-4 max-w-xs text-center text-sm font-semibold leading-6 text-indigo-100">
             Fresh picks, polished details, and a smoother browsing flow.
           </p>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </section>
   );
 };
