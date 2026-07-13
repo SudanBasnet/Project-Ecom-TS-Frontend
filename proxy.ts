@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-const AUTH_COOKIE = "access_token";
+const AUTH_COOKIE = "bs_auth";
 const ROLE_COOKIE = "bs_role";
 
 export function proxy(request: NextRequest) {
