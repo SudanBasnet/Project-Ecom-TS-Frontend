@@ -72,7 +72,10 @@ const CartPage = () => {
     );
   }
 
-  const items = cartQuery.data?.items ?? [];
+  const items = (cartQuery.data?.items ?? []).filter(
+    (item): item is typeof item & { product: NonNullable<typeof item.product> } =>
+      item.product !== null,
+  );
   const subtotal = items.reduce(
     (total, item) => total + getPrice(item.product) * item.quantity,
     0,

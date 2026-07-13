@@ -3,7 +3,7 @@ import { http, unwrapData } from "./http";
 
 export type CartItem = {
   _id: string;
-  product: Product;
+  product: Product | null;
   quantity: number;
 };
 
