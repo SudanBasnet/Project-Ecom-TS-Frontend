@@ -1,12 +1,15 @@
 "use client";
 
 import type { TCategory } from "@/types/category.types";
+import { useReducedMotion } from "framer-motion";
 import Image from "next/image";
-import { FaShoppingBag } from "react-icons/fa";
+import Link from "next/link";
+import { FiArrowUpRight, FiGrid } from "react-icons/fi";
 import Tilt from "react-parallax-tilt";
 
 interface IProps {
   category: TCategory;
+  index: number;
 }
 
 const getCategoryImage = (category: TCategory) => {
@@ -16,7 +19,8 @@ const getCategoryImage = (category: TCategory) => {
   return image?.path;
 };
 
-const CategoryCard = ({ category }: IProps) => {
+const CategoryCard = ({ category, index }: IProps) => {
+  const shouldReduceMotion = useReducedMotion();
   const imagePath = getCategoryImage(category);
   const imageSrc =
     imagePath?.startsWith("/") || imagePath?.startsWith("https://")
@@ -25,37 +29,51 @@ const CategoryCard = ({ category }: IProps) => {
 
   return (
     <Tilt
-      glareEnable
-      glareMaxOpacity={0.12}
+      glareEnable={!shouldReduceMotion}
+      glareMaxOpacity={0.09}
       glareColor="#ffffff"
-      glareBorderRadius="8px"
-      scale={1.015}
-      tiltMaxAngleX={5}
-      tiltMaxAngleY={5}
+      glareBorderRadius="28px"
+      scale={1.01}
+      tiltMaxAngleX={3}
+      tiltMaxAngleY={3}
       transitionSpeed={1200}
+      tiltEnable={!shouldReduceMotion}
+      className="h-full"
     >
-      <article className="flex h-24 gap-3 rounded-lg border border-indigo-100 bg-white p-2 shadow-sm transition-colors hover:shadow-lg hover:shadow-indigo-100 dark:border-slate-700 dark:bg-slate-800 dark:hover:shadow-indigo-950">
-        <div className="relative grid aspect-square h-full shrink-0 place-items-center overflow-hidden rounded-md bg-[#eef2ff] text-[#4f46e5]">
+      <article className="group relative h-full overflow-hidden rounded-[1.75rem] border border-white/70 bg-slate-900 shadow-[0_18px_50px_rgba(15,23,42,.10)] transition-shadow hover:shadow-[0_28px_70px_rgba(79,70,229,.22)] dark:border-slate-700 dark:bg-slate-900">
+        <div className="absolute inset-0 grid place-items-center overflow-hidden bg-gradient-to-br from-indigo-500 via-sky-500 to-emerald-400 text-white">
           {imageSrc ? (
             <Image
               src={imageSrc}
               alt={category.name}
               fill
-              sizes="96px"
-              className="object-cover"
+              sizes="(min-width: 1024px) 42vw, (min-width: 640px) 50vw, 100vw"
+              className="object-cover transition duration-700 group-hover:scale-105"
             />
           ) : (
-            <FaShoppingBag className="size-6" />
+            <FiGrid className="size-14 opacity-80" />
           )}
         </div>
-
-        <div className="flex min-w-0 flex-col justify-center">
-          <p className="truncate text-base font-semibold text-gray-700 dark:text-white">
-            {category.name}
-          </p>
-          <p className="mt-1 line-clamp-2 text-sm leading-[18px] text-gray-400 dark:text-slate-400">
-            {category.description ?? "Explore products in this category."}
-          </p>
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/25 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-5 p-6 text-white">
+          <div className="min-w-0">
+            <p className="text-[0.65rem] font-black uppercase tracking-[0.2em] text-indigo-200">
+              Collection {String(index + 1).padStart(2, "0")}
+            </p>
+            <h3 className="mt-2 truncate text-2xl font-black tracking-tight">
+              {category.name}
+            </h3>
+            <p className="mt-2 line-clamp-2 max-w-md text-sm leading-6 text-slate-200">
+              {category.description ?? "Discover products selected for this collection."}
+            </p>
+          </div>
+          <Link
+            href="/products"
+            aria-label={`Browse ${category.name} products`}
+            className="grid size-12 shrink-0 place-items-center rounded-full border border-white/25 bg-white/10 text-white backdrop-blur transition group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:bg-white group-hover:text-slate-950"
+          >
+            <FiArrowUpRight className="size-5" />
+          </Link>
         </div>
       </article>
     </Tilt>

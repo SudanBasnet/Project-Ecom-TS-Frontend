@@ -10,7 +10,7 @@ const NavBrand = () => {
       <span className="grid size-10 place-items-center rounded-xl bg-[#4f46e5] text-white shadow-md shadow-[#4f46e5]/20">
         <FaShoppingBag className="size-4" />
       </span>
-      <span className="hidden min-[420px]:inline">Broadway Store</span>
+      <span className="hidden sm:inline">Broadway Store</span>
     </Link>
   );
 };

@@ -2,7 +2,8 @@
 
 import type { TCategory } from "@/types/category.types";
 import { motion, useReducedMotion } from "framer-motion";
-import { MdOutlineCloudOff } from "react-icons/md";
+import Link from "next/link";
+import { FiArrowUpRight, FiGrid } from "react-icons/fi";
 import CategoryCard from "./category-card";
 
 interface IProps {
@@ -11,6 +12,13 @@ interface IProps {
 
 const CategoryList = ({ categories }: IProps) => {
   const shouldReduceMotion = useReducedMotion();
+  const cardLayouts = [
+    "lg:col-span-5",
+    "lg:col-span-3",
+    "lg:col-span-4",
+    "lg:col-span-7",
+    "lg:col-span-5",
+  ];
 
   if (categories.length === 0) {
     return (
@@ -18,13 +26,23 @@ const CategoryList = ({ categories }: IProps) => {
         initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.98 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.35, ease: "easeOut" }}
-        className="flex min-h-32 flex-col items-center justify-center rounded-lg border border-dashed border-indigo-200 bg-white px-4 py-8 text-center"
+        className="flex min-h-72 flex-col items-center justify-center rounded-[2rem] border border-dashed border-indigo-200 bg-white/80 px-6 py-10 text-center shadow-sm backdrop-blur dark:border-slate-700 dark:bg-slate-900/70"
       >
-        <MdOutlineCloudOff className="size-10 text-indigo-500" />
-        <p className="mt-2 text-lg font-medium text-gray-700">
-          Categories not found
+        <span className="grid size-16 place-items-center rounded-2xl bg-indigo-50 text-indigo-600 dark:bg-indigo-500/10 dark:text-indigo-300">
+          <FiGrid className="size-7" />
+        </span>
+        <p className="mt-5 text-xl font-black text-slate-900 dark:text-white">
+          The collections are being arranged.
         </p>
-        <p className="mt-1 text-sm text-gray-500">No categories added yet.</p>
+        <p className="mt-2 max-w-md text-sm leading-6 text-slate-500 dark:text-slate-400">
+          Categories will appear here as soon as they are available from the live catalogue.
+        </p>
+        <Link
+          href="/products"
+          className="mt-6 inline-flex items-center gap-2 text-sm font-black text-indigo-600 dark:text-indigo-300"
+        >
+          Browse all products <FiArrowUpRight />
+        </Link>
       </motion.div>
     );
   }
@@ -42,7 +60,7 @@ const CategoryList = ({ categories }: IProps) => {
             : { staggerChildren: 0.08, delayChildren: 0.08 },
         },
       }}
-      className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5"
+      className="grid auto-rows-[17rem] gap-4 sm:grid-cols-2 lg:grid-cols-12"
     >
       {categories.map((category, index) => (
         <motion.div
@@ -55,8 +73,9 @@ const CategoryList = ({ categories }: IProps) => {
           }}
           transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
           whileHover={shouldReduceMotion ? undefined : { y: -4 }}
+          className={`min-h-0 ${cardLayouts[index % cardLayouts.length]}`}
         >
-          <CategoryCard category={category} />
+          <CategoryCard category={category} index={index} />
         </motion.div>
       ))}
     </motion.div>

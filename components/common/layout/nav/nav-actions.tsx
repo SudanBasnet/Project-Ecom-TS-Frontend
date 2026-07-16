@@ -90,15 +90,17 @@ const NavActions = ({ pathname }: NavActionsProps) => {
   return (
     <div className="ml-auto flex items-center gap-1.5 lg:ml-3">
       <ThemeToggle />
-      <IconLink
-        href="/wishlist"
-        label="Wishlist"
-        active={isActiveRoute(pathname, "/wishlist")}
-        activeClassName="bg-rose-50 text-rose-600"
-        inactiveClassName="text-[#64748b] hover:bg-rose-50 hover:text-rose-600"
-      >
-        <FaHeart className="size-4" />
-      </IconLink>
+      <span className="hidden sm:block">
+        <IconLink
+          href="/wishlist"
+          label="Wishlist"
+          active={isActiveRoute(pathname, "/wishlist")}
+          activeClassName="bg-rose-50 text-rose-600"
+          inactiveClassName="text-[#64748b] hover:bg-rose-50 hover:text-rose-600"
+        >
+          <FaHeart className="size-4" />
+        </IconLink>
+      </span>
 
       <IconLink
         href="/cart"
@@ -179,7 +181,7 @@ const NavActions = ({ pathname }: NavActionsProps) => {
         <>
           <Link
             href="/auth/login"
-            className="inline-flex h-10 items-center justify-center rounded-xl border border-[#c7d2fe] bg-white px-3 text-sm font-bold text-[#4338ca] transition hover:border-[#818cf8] hover:bg-[#eef2ff] sm:px-4"
+            className="hidden h-10 items-center justify-center rounded-xl border border-[#c7d2fe] bg-white px-3 text-sm font-bold text-[#4338ca] transition hover:border-[#818cf8] hover:bg-[#eef2ff] sm:inline-flex sm:px-4"
           >
             Sign in
           </Link>
@@ -257,12 +259,20 @@ const MobileMenu = ({
             </button>
           </div>
         ) : (
-          <Link
-            href="/auth/register"
-            className="block rounded-xl bg-[#4f46e5] px-4 py-3 text-center text-sm font-bold text-white hover:bg-[#4338ca]"
-          >
-            Create account
-          </Link>
+          <div className="grid gap-2">
+            <Link
+              href="/auth/login"
+              className="block rounded-xl border border-[#c7d2fe] bg-white px-4 py-3 text-center text-sm font-bold text-[#4338ca] hover:bg-[#eef2ff]"
+            >
+              Sign in
+            </Link>
+            <Link
+              href="/auth/register"
+              className="block rounded-xl bg-[#4f46e5] px-4 py-3 text-center text-sm font-bold text-white hover:bg-[#4338ca]"
+            >
+              Create account
+            </Link>
+          </div>
         )}
       </div>
     </div>
